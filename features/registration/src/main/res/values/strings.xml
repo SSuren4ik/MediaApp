@@ -1,0 +1,28 @@
+<resources>
+    <string name="email_edit_text_hint">Почта</string>
+    <string name="password_edit_text_hint">Пароль</string>
+    <string name="username_edit_text_hint">Ник</string>
+    <string name="app_name">Sports App</string>
+    <string name="error_user_not_exist">Такого пользователя не существует</string>
+    <string name="error_network">Проблемы с соединением</string>
+    <string name="error_too_many_requests">Слишком много запросов, пожалуйста, подождите</string>
+    <string name="error_other">Другая ошибка</string>
+    <string name="error_invalid_email">Неверный формат почты</string>
+    <string name="error_empty_fields">Одно из полей пустое</string>
+    <string name="new_to_here">Впервые здесь?</string>
+    <string name="sign_up">Создать аккаунт</string>
+    <string name="login_button_text">Войти</string>
+    <string name="login_tittle_text">Вход в аккаунт</string>
+    <string name="already_have_account">Есть аккаунт?</string>
+    <string name="login">Войти</string>
+    <string name="unknown_user">Такого пользователя не существует</string>
+    <string name="invalid_connect">Проблемы с соединением</string>
+    <string name="too_much_requsets">Слишком много запросов, пожалуйста, подождите</string>
+    <string name="unknown_error">Неизвестная ошибка</string>
+    <string name="something_is_incorrect">Что то пошло не так</string>
+    <string name="field_is_empty">Одно из полей пустое</string>
+    <string name="incorrect_email_format">Неверный формат почты</string>
+    <string name="bad_password">Недостаточно хороший пароль</string>
+    <string name="incorrect_email_input">Неправильно указана почта</string>
+    <string name="account_already_exist">Учетная запись с данной почтой уже существует</string>
+</resources>

@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".presentation.SignUpFragment">
+
+    <ImageView
+        android:id="@+id/registration_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/image_registration"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/login_tittle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:fontFamily="@font/ubuntu_medium"
+        android:text="@string/sign_up"
+        android:textSize="@dimen/big_text_size"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/registration_image" />
+
+    <com.mediaapp.registration.custom_view.EditTextWithIcon
+        android:id="@+id/username_linear"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/login_button_horizontal_margin"
+        android:layout_marginBottom="@dimen/margin_between_user_data"
+        app:layout_constraintBottom_toTopOf="@+id/email_linear"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <com.mediaapp.registration.custom_view.EditTextWithIcon
+        android:id="@+id/email_linear"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/login_button_horizontal_margin"
+        android:layout_marginBottom="10dp"
+        app:layout_constraintBottom_toTopOf="@+id/password_linear"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <com.mediaapp.registration.custom_view.EditTextWithIcon
+        android:id="@+id/password_linear"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/login_button_horizontal_margin"
+        android:layout_marginBottom="@dimen/button_bottom_margin"
+        app:layout_constraintBottom_toTopOf="@+id/sign_up_btn"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/sign_up_btn"
+        style="@style/BlueButtonStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/login_button_horizontal_margin"
+        android:layout_marginBottom="@dimen/button_bottom_margin"
+        android:text="@string/sign_up"
+        app:layout_constraintBottom_toTopOf="@+id/registration_linear"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/registration_linear"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/linear_bottom_margin"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/already_have_account"
+            android:textSize="@dimen/login_navigation_text_size" />
+
+        <TextView
+            android:id="@+id/go_to_login_activtity_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/go_to_fragment_start_margin"
+            android:text="@string/login"
+            android:textColor="@color/button_blue"
+            android:textSize="@dimen/login_navigation_text_size" />
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

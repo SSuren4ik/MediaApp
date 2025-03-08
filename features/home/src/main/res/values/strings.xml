@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="top_downloads_tittle_text">Топ скачиваний</string>
-    <string name="new_releases_tittle_text">Новинки</string>
-    <string name="top_popular_tittle_text">Хиты</string>
-    <string name="network_error_text">ошибка сети</string>
+    <string name="new_releases_tittle_text">Новые релизы</string>
+    <string name="top_popular_tittle_text">Чарты</string>
+    <string name="network_error_text">Ошибка сети</string>
 </resources>

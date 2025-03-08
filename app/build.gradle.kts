@@ -43,6 +43,7 @@ dependencies {
     implementation(projects.core)
     implementation(projects.designSystem)
     implementation(projects.features.home)
+    implementation(projects.features.album)
 
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.constraintlayout)

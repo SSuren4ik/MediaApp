@@ -1,6 +1,7 @@
 package com.mediaapp.di
 
 import com.mediaapp.R
+import com.mediaapp.core.utils.LauncherAlbum
 import com.mediaapp.core.utils.Router
 import com.mediaapp.utils.AppNavigationComponent
 import dagger.Module
@@ -23,6 +24,12 @@ class UtilsModule {
     @Provides
     @Singleton
     fun provideRouter(): Router {
+        return AppNavigationComponent()
+    }
+
+    @Provides
+    @Singleton
+    fun provideLauncherAlbum(): LauncherAlbum {
         return AppNavigationComponent()
     }
 }

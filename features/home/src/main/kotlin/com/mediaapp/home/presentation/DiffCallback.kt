@@ -1,7 +1,7 @@
 package com.mediaapp.home.presentation
 
 import androidx.recyclerview.widget.DiffUtil
-import com.mediaapp.core.data.Track
+import com.mediaapp.core.models.Track
 
 class DiffCallback : DiffUtil.Callback() {
 

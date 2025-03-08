@@ -11,22 +11,30 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.HORIZONTAL
-import com.mediaapp.core.data.Track
+import com.mediaapp.core.models.Track
+import com.mediaapp.core.utils.LauncherAlbum
 import com.mediaapp.core.utils.ResourceProvider
+import com.mediaapp.home.R
 import com.mediaapp.home.databinding.FragmentHomeBinding
 import com.mediaapp.home.di.HomeDepsProvider
+import com.mediaapp.home.di.HomeFeatureComponent
 import com.mediaapp.home.domain.models.ResponseStatus
 import com.mediaapp.home.presentation.viewmodel.HomeViewModel
 import com.mediaapp.home.presentation.viewmodel.HomeViewModelFactory
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 class HomeFragment : Fragment() {
 
+    @Inject
+    lateinit var router: LauncherAlbum
+
     private lateinit var binding: FragmentHomeBinding
-    private lateinit var popularMusicAdapter: MusicAdapter
-    private lateinit var newMusicAdapter: MusicAdapter
-    private lateinit var topDownloadsMusicAdapter: MusicAdapter
+    private val popularMusicAdapter: MusicAdapter by lazy { MusicAdapter(router) }
+    private val newMusicAdapter: MusicAdapter by lazy { MusicAdapter(router) }
+    private val topDownloadsMusicAdapter: MusicAdapter by lazy { MusicAdapter(router) }
     private var diffCallback = DiffCallback()
 
     private val viewModel: HomeViewModel by viewModels {
@@ -38,7 +46,7 @@ class HomeFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
-        binding = FragmentHomeBinding.inflate(layoutInflater, container, false)
+        binding = FragmentHomeBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -50,7 +58,7 @@ class HomeFragment : Fragment() {
         addShimmers()
 
         lifecycleScope.launch {
-            observePopularMusicState()
+            observeMusicState()
         }
 
         lifecycleScope.launch {
@@ -59,28 +67,23 @@ class HomeFragment : Fragment() {
     }
 
     private fun setPadding() {
-        ViewCompat.setOnApplyWindowInsetsListener(binding.popularTittleTextView) { view, insets ->
-            val innerPadding = insets.getInsets(
-                WindowInsetsCompat.Type.systemBars()
-            )
-            view.setPadding(
-                0, innerPadding.top, 0, 0
-            )
+        ViewCompat.setOnApplyWindowInsetsListener(binding.popularTitleTextView) { view, insets ->
+            val innerPadding = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            view.setPadding(0, innerPadding.top, 0, 0)
             insets
         }
     }
 
     private fun addShimmers() {
-        popularMusicAdapter.setData(listOf(Track(), Track(), Track()), diffCallback)
-        newMusicAdapter.setData(listOf(Track(), Track(), Track()), diffCallback)
-        topDownloadsMusicAdapter.setData(listOf(Track(), Track(), Track()), diffCallback)
+        listOf(popularMusicAdapter, newMusicAdapter, topDownloadsMusicAdapter).forEach { adapter ->
+            adapter.setData(listOf(Track(), Track(), Track()), diffCallback)
+        }
     }
 
-    private suspend fun observePopularMusicState() {
+    private suspend fun observeMusicState() {
         viewModel.responseStatus.collect { result ->
             when (result) {
                 is ResponseStatus.Error -> showToast(result.error)
-
                 is ResponseStatus.SuccessResponse -> {
                     updateMusicData(result)
                 }
@@ -89,35 +92,17 @@ class HomeFragment : Fragment() {
     }
 
     private fun initRecyclerViews() {
-        initPopularRecyclerView()
-        initNewReleasesRecyclerView()
-        initTopDownloadsRecyclerView()
+        initRecyclerView(binding.popularMusicRecyclerView, popularMusicAdapter)
+        initRecyclerView(binding.newMusicRecyclerView, newMusicAdapter)
+        initRecyclerView(binding.topDownloadsMusicRecyclerView, topDownloadsMusicAdapter)
     }
 
-    private fun initPopularRecyclerView() {
-        popularMusicAdapter = MusicAdapter()
-        binding.popularMusicRecyclerView.layoutManager =
-            LinearLayoutManager(requireContext()).apply {
-                orientation = HORIZONTAL
-            }
-        binding.popularMusicRecyclerView.adapter = popularMusicAdapter
-    }
+    private fun initRecyclerView(recyclerView: RecyclerView, adapter: MusicAdapter) {
+        recyclerView.layoutManager = LinearLayoutManager(requireContext(), HORIZONTAL, false)
+        recyclerView.adapter = adapter
 
-    private fun initNewReleasesRecyclerView() {
-        newMusicAdapter = MusicAdapter()
-        binding.newMusicRecyclerView.layoutManager = LinearLayoutManager(requireContext()).apply {
-            orientation = HORIZONTAL
-        }
-        binding.newMusicRecyclerView.adapter = newMusicAdapter
-    }
-
-    private fun initTopDownloadsRecyclerView() {
-        topDownloadsMusicAdapter = MusicAdapter()
-        binding.topDownloadsMusicRecyclerView.layoutManager =
-            LinearLayoutManager(requireContext()).apply {
-                orientation = HORIZONTAL
-            }
-        binding.topDownloadsMusicRecyclerView.adapter = topDownloadsMusicAdapter
+        val spacingInPixels = resources.getDimensionPixelSize(R.dimen.item_spacing)
+        recyclerView.addItemDecoration(ItemSpacingDecorator(spacingInPixels))
     }
 
     private fun updateMusicData(data: ResponseStatus.SuccessResponse) {
@@ -131,8 +116,9 @@ class HomeFragment : Fragment() {
     }
 
     private fun initDI() {
-        val weatherComponent =
+        val homeComponent =
             (requireContext().applicationContext as HomeDepsProvider).getHomeComponent()
-        weatherComponent.inject(viewModel)
+        homeComponent.inject(viewModel)
+        homeComponent.inject(this)
     }
 }

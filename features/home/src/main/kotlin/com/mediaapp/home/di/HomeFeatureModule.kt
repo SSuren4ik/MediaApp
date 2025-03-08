@@ -3,8 +3,8 @@ package com.mediaapp.home.di
 import com.mediaapp.core.di.MediaModule
 import com.mediaapp.core.di.NetworkModule
 import com.mediaapp.core.domain.MediaService
-import com.mediaapp.home.data.MediaRepositoryImpl
-import com.mediaapp.home.domain.repository.MediaRepository
+import com.mediaapp.home.data.HomeMediaRepositoryImpl
+import com.mediaapp.home.domain.repository.HomeMediaRepository
 import com.mediaapp.home.domain.usecase.GetNewMusicUseCase
 import com.mediaapp.home.domain.usecase.GetPopularMusicUseCase
 import com.mediaapp.home.domain.usecase.GetTopDownloadsMusicUseCase
@@ -19,22 +19,22 @@ class HomeFeatureModule {
     fun provideMediaRepository(
         service: MediaService,
         @Named("apiKey") apiKey: String,
-    ): MediaRepository {
-        return MediaRepositoryImpl(service, apiKey)
+    ): HomeMediaRepository {
+        return HomeMediaRepositoryImpl(service, apiKey)
     }
 
     @Provides
-    fun provideGetPopularMusicUseCase(repository: MediaRepository): GetPopularMusicUseCase {
+    fun provideGetPopularMusicUseCase(repository: HomeMediaRepository): GetPopularMusicUseCase {
         return GetPopularMusicUseCase(repository)
     }
 
     @Provides
-    fun provideGetNewMusicUseCase(repository: MediaRepository): GetNewMusicUseCase {
+    fun provideGetNewMusicUseCase(repository: HomeMediaRepository): GetNewMusicUseCase {
         return GetNewMusicUseCase(repository)
     }
 
     @Provides
-    fun provideGetTopDownloadsMusicUseCase(repository: MediaRepository): GetTopDownloadsMusicUseCase {
+    fun provideGetTopDownloadsMusicUseCase(repository: HomeMediaRepository): GetTopDownloadsMusicUseCase {
         return GetTopDownloadsMusicUseCase(repository)
     }
 }

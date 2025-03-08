@@ -1,6 +1,6 @@
 package com.mediaapp.core.domain
 
-import com.mediaapp.core.data.MediaResponse
+import com.mediaapp.core.models.MediaResponse
 import retrofit2.http.GET
 import retrofit2.http.Query
 
@@ -32,5 +32,12 @@ interface MediaService {
         @Query("order") order: String = "downloads_month_desc",
         @Query("limit") limit: Int = 20,
         @Query("include") include: String = "musicinfo",
+    ): MediaResponse
+
+    @GET("albums")
+    suspend fun getAlbumTracks(
+        @Query("client_id") apiKey: String,
+        @Query("namesearch") albumName: String,
+        @Query("format") format: String = "json",
     ): MediaResponse
 }

@@ -1,25 +1,28 @@
 package com.mediaapp.home.di
 
-import android.content.Context
 import com.mediaapp.core.domain.MediaService
+import com.mediaapp.core.utils.LauncherAlbum
+import com.mediaapp.home.presentation.HomeFragment
 import com.mediaapp.home.presentation.viewmodel.HomeViewModel
-import dagger.BindsInstance
 import dagger.Component
 import javax.inject.Singleton
 
 @Singleton
-@Component(modules = [HomeFeatureModule::class])
+@Component(dependencies = [HomeDeps::class], modules = [HomeFeatureModule::class])
 interface HomeFeatureComponent {
-    val service: MediaService
+
     fun inject(viewModel: HomeViewModel)
+    fun inject(viewModel: HomeFragment)
 
     @Component.Builder
     interface Builder {
-        @BindsInstance
-        fun context(context: Context): Builder
-
+        fun deps(deps: HomeDeps): Builder
         fun build(): HomeFeatureComponent
     }
+}
+
+interface HomeDeps {
+    val launcherAlbum: LauncherAlbum
 }
 
 interface HomeDepsProvider {

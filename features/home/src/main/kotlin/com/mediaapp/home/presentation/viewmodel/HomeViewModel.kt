@@ -49,6 +49,7 @@ class HomeViewModel(
                 _responseStatus.emit(response)
                 return@launch
             }
+
             val deferredResults = listOf(async { getPopularMusicUseCase.execute() },
                 async { getNewMusicUseCase.execute() },
                 async { getTopDownloadsMusicUseCase.execute() })

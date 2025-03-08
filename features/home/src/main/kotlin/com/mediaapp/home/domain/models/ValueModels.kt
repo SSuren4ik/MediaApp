@@ -1,6 +1,6 @@
 package com.mediaapp.home.domain.models
 
-import com.mediaapp.core.data.Track
+import com.mediaapp.core.models.Track
 
 @JvmInline
 value class NewMusic(val value: List<Track>)

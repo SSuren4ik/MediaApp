@@ -29,3 +29,4 @@ include(":features")
 
 include(":features:registration")
 include(":features:home")
+include(":features:album")

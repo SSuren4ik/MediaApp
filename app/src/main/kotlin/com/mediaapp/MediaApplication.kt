@@ -1,6 +1,9 @@
 package com.mediaapp
 
 import android.app.Application
+import com.mediaapp.album.di.AlbumDepsProvider
+import com.mediaapp.album.di.AlbumFeatureComponent
+import com.mediaapp.album.di.DaggerAlbumFeatureComponent
 import com.mediaapp.core.utils.ResourceProvider
 import com.mediaapp.di.AppComponent
 import com.mediaapp.di.DaggerAppComponent
@@ -12,7 +15,7 @@ import com.mediaapp.registration.di.RegistrationComponent
 import com.mediaapp.registration.di.RegistrationDepsProvider
 
 class MediaApplication : Application(), RegistrationDepsProvider, ResourceProvider,
-    HomeDepsProvider {
+    HomeDepsProvider, AlbumDepsProvider {
 
     private lateinit var appComponent: AppComponent
 
@@ -26,6 +29,10 @@ class MediaApplication : Application(), RegistrationDepsProvider, ResourceProvid
     }
 
     override fun getHomeComponent(): HomeFeatureComponent {
-        return DaggerHomeFeatureComponent.builder().context(this).build()
+        return DaggerHomeFeatureComponent.builder().deps(appComponent).build()
+    }
+
+    override fun getAlbumComponent(): AlbumFeatureComponent {
+        return DaggerAlbumFeatureComponent.builder().build()
     }
 }

@@ -1,19 +1,15 @@
-import java.util.Properties
-
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     id("kotlin-kapt")
-    id ("kotlin-parcelize")
 }
 
 android {
-    namespace = "com.mediaapp.core"
+    namespace = "com.mediaapp.album"
     compileSdk = 35
 
     defaultConfig {
         minSdk = 26
-        buildConfigField("String", "API_KEY", getApiKey())
     }
 
     buildTypes {
@@ -32,26 +28,23 @@ android {
         jvmTarget = "17"
     }
     buildFeatures {
-        buildConfig = true
+        viewBinding = true
     }
 }
 
 dependencies {
+    implementation(projects.designSystem)
+    implementation(projects.core)
+
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.fragment.ktx)
-    implementation(libs.androidx.core)
-
-    implementation(libs.converter.gson)
+    implementation(libs.material)
 
     implementation(libs.dagger)
     kapt(libs.dagger.compiler)
-    implementation(libs.retrofit)
-    implementation(libs.androidx.constraintlayout)
-}
 
-fun getApiKey(): String {
-    val properties = Properties()
-    file("../local.properties").inputStream().use { properties.load(it) }
-    val key = properties.getProperty("API_KEY", "")
-    return key
+    implementation (libs.glide)
+    kapt(libs.compiler)
+
+    implementation(libs.androidx.constraintlayout)
 }

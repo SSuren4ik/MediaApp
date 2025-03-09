@@ -19,7 +19,6 @@ import com.mediaapp.core.utils.ResourceProvider
 import com.mediaapp.home.R
 import com.mediaapp.home.databinding.FragmentHomeBinding
 import com.mediaapp.home.di.HomeDepsProvider
-import com.mediaapp.home.di.HomeFeatureComponent
 import com.mediaapp.home.domain.models.ResponseStatus
 import com.mediaapp.home.presentation.viewmodel.HomeViewModel
 import com.mediaapp.home.presentation.viewmodel.HomeViewModelFactory
@@ -35,7 +34,7 @@ class HomeFragment : Fragment() {
     private val popularMusicAdapter: MusicAdapter by lazy { MusicAdapter(router) }
     private val newMusicAdapter: MusicAdapter by lazy { MusicAdapter(router) }
     private val topDownloadsMusicAdapter: MusicAdapter by lazy { MusicAdapter(router) }
-    private var diffCallback = DiffCallback()
+    private var homeDiffCallback = HomeDiffCallback()
 
     private val viewModel: HomeViewModel by viewModels {
         HomeViewModelFactory(requireActivity().application as ResourceProvider)
@@ -56,11 +55,7 @@ class HomeFragment : Fragment() {
         initRecyclerViews()
         setPadding()
         addShimmers()
-
-        lifecycleScope.launch {
-            observeMusicState()
-        }
-
+        observeMusicState()
         lifecycleScope.launch {
             viewModel.getMusic()
         }
@@ -76,16 +71,18 @@ class HomeFragment : Fragment() {
 
     private fun addShimmers() {
         listOf(popularMusicAdapter, newMusicAdapter, topDownloadsMusicAdapter).forEach { adapter ->
-            adapter.setData(listOf(Track(), Track(), Track()), diffCallback)
+            adapter.setData(listOf(Track(), Track(), Track()), homeDiffCallback)
         }
     }
 
-    private suspend fun observeMusicState() {
-        viewModel.responseStatus.collect { result ->
-            when (result) {
-                is ResponseStatus.Error -> showToast(result.error)
-                is ResponseStatus.SuccessResponse -> {
-                    updateMusicData(result)
+    private fun observeMusicState() {
+        lifecycleScope.launch {
+            viewModel.responseStatus.collect { result ->
+                when (result) {
+                    is ResponseStatus.Error -> showToast(result.error)
+                    is ResponseStatus.SuccessResponse -> {
+                        updateMusicData(result)
+                    }
                 }
             }
         }
@@ -106,9 +103,9 @@ class HomeFragment : Fragment() {
     }
 
     private fun updateMusicData(data: ResponseStatus.SuccessResponse) {
-        newMusicAdapter.setData(data.newMusic.value, diffCallback)
-        popularMusicAdapter.setData(data.popularMusic.value, diffCallback)
-        topDownloadsMusicAdapter.setData(data.topDownloadsMusic.value, diffCallback)
+        newMusicAdapter.setData(data.newMusic.value, homeDiffCallback)
+        popularMusicAdapter.setData(data.popularMusic.value, homeDiffCallback)
+        topDownloadsMusicAdapter.setData(data.topDownloadsMusic.value, homeDiffCallback)
     }
 
     private fun showToast(text: String) {

@@ -59,8 +59,7 @@ class MusicListView @JvmOverloads constructor(
 
         iconImage.layout(0, 0, iconSize, iconSize)
 
-        val musicViewHeight = iconSize
-        val textViewTop = (musicViewHeight - textViewHeight) / 2
+        val textViewTop = (iconSize - textViewHeight) / 2
 
         textView.layout(
             iconSize, textViewTop, iconSize + textView.measuredWidth, textViewTop + textViewHeight

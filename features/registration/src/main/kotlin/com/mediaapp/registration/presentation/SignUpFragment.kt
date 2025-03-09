@@ -115,9 +115,7 @@ class SignUpFragment : Fragment() {
             val innerPadding = insets.getInsets(
                 WindowInsetsCompat.Type.systemBars()
             )
-            view.setPadding(
-                0, 0, 0, innerPadding.bottom
-            )
+            view.setPadding(0, 0, 0, innerPadding.bottom)
             insets
         }
     }
@@ -127,9 +125,7 @@ class SignUpFragment : Fragment() {
             val innerPadding = insets.getInsets(
                 WindowInsetsCompat.Type.systemBars()
             )
-            view.setPadding(
-                0, innerPadding.top, 0, 0
-            )
+            view.setPadding(0, innerPadding.top, 0, 0)
             insets
         }
     }

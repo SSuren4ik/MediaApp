@@ -46,7 +46,8 @@ class LoginFragment : Fragment() {
         binding.loginBtn.setOnClickListener {
             binding.loginBtn.isEnabled = false
 //            viewModel.loginUser(getEmail(), getPassword())
-            viewModel.loginUser(Email("Test1@mail.ru"), Password("Test123"))
+//            viewModel.loginUser(Email("Test1@mail.ru"), Password("Test123"))
+            (activity as RegistrationActivity).onRegistrationComplete()
         }
 
         lifecycleScope.launch {
@@ -112,9 +113,7 @@ class LoginFragment : Fragment() {
             val innerPadding = insets.getInsets(
                 WindowInsetsCompat.Type.systemBars()
             )
-            view.setPadding(
-                0, 0, 0, innerPadding.bottom
-            )
+            view.setPadding(0, 0, 0, innerPadding.bottom)
             insets
         }
     }
@@ -124,9 +123,7 @@ class LoginFragment : Fragment() {
             val innerPadding = insets.getInsets(
                 WindowInsetsCompat.Type.systemBars()
             )
-            view.setPadding(
-                0, innerPadding.top, 0, 0
-            )
+            view.setPadding(0, innerPadding.top, 0, 0)
             insets
         }
     }

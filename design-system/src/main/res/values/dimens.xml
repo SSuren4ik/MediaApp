@@ -5,6 +5,7 @@
     <dimen name="small_text_size">8sp</dimen>
     <dimen name="album_name_under_album_size">6sp</dimen>
     <dimen name="artist_name_under_album_size">5sp</dimen>
+    <dimen name="music_name_in_album_size">5sp</dimen>
     <dimen name="album_list_icon_size">120sp</dimen>
-    <dimen name="album_solo_icon_size">240sp</dimen>
+    <dimen name="album_solo_icon_size">300sp</dimen>
 </resources>

@@ -1,6 +1,5 @@
 package com.mediaapp.home.di
 
-import com.mediaapp.core.domain.MediaService
 import com.mediaapp.core.utils.LauncherAlbum
 import com.mediaapp.home.presentation.HomeFragment
 import com.mediaapp.home.presentation.viewmodel.HomeViewModel

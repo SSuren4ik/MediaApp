@@ -14,9 +14,9 @@ class MusicAdapter(private val launcherAlbum: LauncherAlbum) :
 
     private var dataList: List<Track> = emptyList()
 
-    fun setData(newDataList: List<Track>, diffCallback: DiffCallback) {
-        diffCallback.setData(dataList, newDataList)
-        val diffResult = DiffUtil.calculateDiff(diffCallback)
+    fun setData(newDataList: List<Track>, homeDiffCallback: HomeDiffCallback) {
+        homeDiffCallback.setData(dataList, newDataList)
+        val diffResult = DiffUtil.calculateDiff(homeDiffCallback)
         dataList = newDataList
         diffResult.dispatchUpdatesTo(this)
     }

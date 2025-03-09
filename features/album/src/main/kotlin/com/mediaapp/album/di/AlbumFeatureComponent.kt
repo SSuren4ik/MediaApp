@@ -1,6 +1,5 @@
 package com.mediaapp.album.di
 
-import com.mediaapp.album.presentation.AlbumActivity
 import com.mediaapp.album.presentation.viewmodel.AlbumViewModel
 import dagger.Component
 import javax.inject.Singleton
@@ -9,7 +8,6 @@ import javax.inject.Singleton
 @Component(modules = [AlbumFeatureModule::class])
 interface AlbumFeatureComponent {
 
-    fun inject(viewModel: AlbumActivity)
     fun inject(viewModel: AlbumViewModel)
 
     @Component.Builder

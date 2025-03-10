@@ -2,7 +2,7 @@
 <resources>
 
     <style name="BlueButtonStyle" parent="Widget.Material3.Button">
-        <item name="cornerRadius">10dp</item>
+        <item name="cornerRadius">10sp</item>
         <item name="backgroundTint">@color/button_blue</item>
         <item name="android:textColor">@color/black</item>
         <item name="android:fontFamily">@font/ubuntu_medium</item>

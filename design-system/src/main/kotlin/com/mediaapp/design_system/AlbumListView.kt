@@ -17,10 +17,15 @@ class AlbumListView @JvmOverloads constructor(
             resources.getDimension(R.dimen.album_list_icon_size).toInt(),
             resources.getDimension(R.dimen.album_list_icon_size).toInt()
         )
+        setBackgroundResource(R.drawable.gray_rounded_background)
     }
 
     private val albumNameTextView = TextView(context).apply {
         textSize = resources.getDimension(R.dimen.album_name_under_album_size)
+        layoutParams = LayoutParams(
+            resources.getDimension(R.dimen.album_list_icon_size).toInt(), LayoutParams.WRAP_CONTENT
+        )
+        setBackgroundResource(R.drawable.gray_rounded_background)
         setHorizontallyScrolling(true)
         isSingleLine = true
         ellipsize = android.text.TextUtils.TruncateAt.MARQUEE
@@ -32,6 +37,10 @@ class AlbumListView @JvmOverloads constructor(
     private val artistNameTextView = TextView(context).apply {
         textSize = resources.getDimension(R.dimen.artist_name_under_album_size)
         setTextColor(resources.getColor(R.color.gray, context.theme))
+        layoutParams = LayoutParams(
+            resources.getDimension(R.dimen.album_list_icon_size).toInt(), LayoutParams.WRAP_CONTENT
+        )
+        setBackgroundResource(R.drawable.gray_rounded_background)
         setHorizontallyScrolling(true)
         isSingleLine = true
         ellipsize = android.text.TextUtils.TruncateAt.MARQUEE
@@ -49,10 +58,12 @@ class AlbumListView @JvmOverloads constructor(
 
     fun setAlbumName(text: String) {
         albumNameTextView.text = text
+        albumNameTextView.setBackgroundColor(resources.getColor(android.R.color.transparent))
     }
 
     fun setArtistName(text: String) {
         artistNameTextView.text = text
+        artistNameTextView.setBackgroundColor(resources.getColor(android.R.color.transparent))
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
@@ -74,7 +85,9 @@ class AlbumListView @JvmOverloads constructor(
         )
 
         val totalHeight =
-            iconSize + albumNameTextView.measuredHeight + artistNameTextView.measuredHeight
+            iconSize + albumNameTextView.measuredHeight + artistNameTextView.measuredHeight + resources.getDimensionPixelSize(
+                R.dimen.margin_between_textview
+            ) * 2
 
         setMeasuredDimension(
             resolveSize(iconSize, widthMeasureSpec), resolveSize(totalHeight, heightMeasureSpec)
@@ -83,14 +96,18 @@ class AlbumListView @JvmOverloads constructor(
 
     override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
         val iconSize = resources.getDimension(R.dimen.album_list_icon_size).toInt()
+        val textMargin = resources.getDimensionPixelSize(R.dimen.margin_between_textview)
 
         iconImage.layout(0, 0, iconSize, iconSize)
 
         albumNameTextView.layout(
-            0, iconSize, iconSize, iconSize + albumNameTextView.measuredHeight
+            0,
+            iconSize + textMargin,
+            iconSize,
+            iconSize + albumNameTextView.measuredHeight + textMargin
         )
 
-        val artistNameTop = iconSize + albumNameTextView.measuredHeight
+        val artistNameTop = iconSize + albumNameTextView.measuredHeight + textMargin * 2
         artistNameTextView.layout(
             0, artistNameTop, iconSize, artistNameTop + artistNameTextView.measuredHeight
         )

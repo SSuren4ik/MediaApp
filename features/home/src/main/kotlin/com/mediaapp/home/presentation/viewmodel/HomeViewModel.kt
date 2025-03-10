@@ -58,7 +58,10 @@ class HomeViewModel(
 
             results.forEach { request ->
                 when (request) {
-                    is NetworkRequest.ErrorConnect -> error = true
+                    is NetworkRequest.ErrorConnect -> {
+                        error = true
+                        return@forEach
+                    }
                     is NetworkRequest.NormalConnect -> successRequestHandler(request)
                 }
             }

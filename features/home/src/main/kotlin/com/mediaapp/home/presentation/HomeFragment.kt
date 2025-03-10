@@ -56,9 +56,7 @@ class HomeFragment : Fragment() {
         setPadding()
         addShimmers()
         observeMusicState()
-        lifecycleScope.launch {
-            viewModel.getMusic()
-        }
+        getMusic()
     }
 
     private fun setPadding() {
@@ -66,6 +64,12 @@ class HomeFragment : Fragment() {
             val innerPadding = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             view.setPadding(0, innerPadding.top, 0, 0)
             insets
+        }
+    }
+
+    private fun getMusic() {
+        lifecycleScope.launch {
+            viewModel.getMusic()
         }
     }
 
@@ -98,7 +102,8 @@ class HomeFragment : Fragment() {
         recyclerView.layoutManager = LinearLayoutManager(requireContext(), HORIZONTAL, false)
         recyclerView.adapter = adapter
 
-        val spacingInPixels = resources.getDimensionPixelSize(R.dimen.item_spacing)
+        val spacingInPixels =
+            resources.getDimensionPixelSize(com.mediaapp.design_system.R.dimen.item_spacing)
         recyclerView.addItemDecoration(ItemSpacingDecorator(spacingInPixels))
     }
 

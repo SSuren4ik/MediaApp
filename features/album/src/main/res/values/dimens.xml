@@ -1,6 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="album_name_top_dimen">10dp</dimen>
-    <dimen name="title_top_dimen">10dp</dimen>
-    <dimen name="item_spacing">10sp</dimen>
+    <dimen name="music_list_margin_in_album">40dp</dimen>
 </resources>

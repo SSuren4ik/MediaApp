@@ -12,7 +12,14 @@ class ItemSpacingDecorator(private val spacing: Int) : RecyclerView.ItemDecorati
         parent: RecyclerView,
         state: RecyclerView.State,
     ) {
-        outRect.right = spacing
+        val position = parent.getChildAdapterPosition(view)
+        val itemCount = state.itemCount
+
+        if (position != itemCount - 1) {
+            outRect.right = spacing
+        }
+
         outRect.top = spacing
+        outRect.bottom = spacing
     }
 }

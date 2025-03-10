@@ -19,11 +19,12 @@
         android:id="@+id/login_tittle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="@dimen/title_top_margin"
         android:fontFamily="@font/ubuntu_medium"
         android:text="@string/login_tittle_text"
         android:textSize="@dimen/big_text_size"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/login_image" />
 
@@ -32,7 +33,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/login_button_horizontal_margin"
-        android:layout_marginBottom="10dp"
+        android:layout_marginBottom="@dimen/margin_between_user_data"
         app:layout_constraintBottom_toTopOf="@+id/password_linear"
         app:layout_constraintStart_toStartOf="parent" />
 

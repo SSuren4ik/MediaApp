@@ -3,9 +3,18 @@
     <dimen name="big_text_size">30sp</dimen>
     <dimen name="normal_text_size">20sp</dimen>
     <dimen name="small_text_size">8sp</dimen>
-    <dimen name="album_name_under_album_size">6sp</dimen>
-    <dimen name="artist_name_under_album_size">5sp</dimen>
-    <dimen name="music_name_in_album_size">5sp</dimen>
+    <dimen name="album_name_under_album_size">5sp</dimen>
+    <dimen name="artist_name_under_album_size">4sp</dimen>
+    <dimen name="margin_between_textview">3sp</dimen>
+    <dimen name="music_name_in_album_size">6sp</dimen>
+    <dimen name="number_in_music_size">40sp</dimen>
     <dimen name="album_list_icon_size">120sp</dimen>
     <dimen name="album_solo_icon_size">300sp</dimen>
+    <dimen name="corner_radius">10sp</dimen>
+    <dimen name="album_name_top_dimen">10sp</dimen>
+    <dimen name="album_image_top_dimen">20sp</dimen>
+    <dimen name="title_top_dimen">10sp</dimen>
+    <dimen name="title_start_dimen">10sp</dimen>
+    <dimen name="item_spacing">10sp</dimen>
+    <dimen name="music_name_border_width">1sp</dimen>
 </resources>

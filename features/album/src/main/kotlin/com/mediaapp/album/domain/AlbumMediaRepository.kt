@@ -1,5 +1,5 @@
 package com.mediaapp.album.domain
 
 interface AlbumMediaRepository {
-    suspend fun getAlbumTracks(albumName: AlbumData): NetworkRequest
+    suspend fun getAlbumTracks(data: AlbumData): NetworkRequest
 }

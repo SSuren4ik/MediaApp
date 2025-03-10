@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="login_button_horizontal_margin">70dp</dimen>
-    <dimen name="login_tittle_bottom_margin">40dp</dimen>
-    <dimen name="button_bottom_margin">20dp</dimen>
+    <dimen name="login_button_horizontal_margin">70sp</dimen>
+    <dimen name="login_tittle_bottom_margin">40sp</dimen>
+    <dimen name="button_bottom_margin">20sp</dimen>
+    <dimen name="title_top_margin">20sp</dimen>
     <dimen name="login_navigation_text_size">15sp</dimen>
-    <dimen name="margin_between_user_data">10dp</dimen>
-    <dimen name="image_margin_top">40dp</dimen>
-    <dimen name="linear_bottom_margin">20dp</dimen>
-    <dimen name="go_to_fragment_start_margin">10dp</dimen>
+    <dimen name="margin_between_user_data">10sp</dimen>
+    <dimen name="image_margin_top">40sp</dimen>
+    <dimen name="linear_bottom_margin">20sp</dimen>
+    <dimen name="go_to_fragment_start_margin">10sp</dimen>
 </resources>

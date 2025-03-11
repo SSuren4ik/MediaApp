@@ -25,6 +25,7 @@ class AlbumViewModel : ViewModel() {
         viewModelScope.launch {
             if (::tracks.isInitialized) {
                 _responseStatus.emit(NetworkRequest.NormalConnect(tracks))
+                return@launch
             }
             val result = getAlbumTracksUseCase.execute(data)
             when (result) {

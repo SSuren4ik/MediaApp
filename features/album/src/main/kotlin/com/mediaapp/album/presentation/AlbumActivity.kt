@@ -1,8 +1,8 @@
 package com.mediaapp.album.presentation
 
-import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
@@ -40,6 +40,7 @@ class AlbumActivity : AppCompatActivity() {
         initDI()
         setInsets()
         initRecyclerView()
+        binding.albumDateTextView.visibility = View.GONE
         observeAlbumTracks()
         getAlbumTracks()
     }
@@ -60,6 +61,7 @@ class AlbumActivity : AppCompatActivity() {
                     is NetworkRequest.ErrorConnect -> showToast(result.message)
                     is NetworkRequest.NormalConnect -> {
                         updateData(result.tracks)
+                        binding.albumDateTextView.visibility = View.VISIBLE
                     }
                 }
             }
@@ -76,11 +78,7 @@ class AlbumActivity : AppCompatActivity() {
 
         val numberWidthFixed =
             resources.getDimensionPixelSize(com.mediaapp.design_system.R.dimen.number_in_music_size)
-        val lineColor = Color.GRAY
-        val lineWidth =
-            resources.getDimensionPixelSize(com.mediaapp.design_system.R.dimen.music_name_border_width)
-
-        val itemDecoration = ItemSpacingDecorator(lineColor, lineWidth.toFloat(), numberWidthFixed)
+        val itemDecoration = ItemSpacingDecorator(numberWidthFixed)
         binding.recyclerView.addItemDecoration(itemDecoration)
     }
 
@@ -121,15 +119,9 @@ class AlbumActivity : AppCompatActivity() {
     }
 
     private fun setInsets() {
-        ViewCompat.setOnApplyWindowInsetsListener(binding.albumImage) { view, insets ->
+        ViewCompat.setOnApplyWindowInsetsListener(binding.mainContent) { view, insets ->
             val innerPadding = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            view.setPadding(0, innerPadding.top, 0, 0)
-            insets
-        }
-
-        ViewCompat.setOnApplyWindowInsetsListener(binding.albumDateTextView) { view, insets ->
-            val innerPadding = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            view.setPadding(0, 0, 0, innerPadding.bottom)
+            view.setPadding(0, innerPadding.top, 0, innerPadding.bottom)
             insets
         }
     }

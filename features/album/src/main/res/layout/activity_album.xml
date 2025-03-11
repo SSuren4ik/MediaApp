@@ -1,56 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
+    android:id="@+id/main_content"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".presentation.AlbumActivity">
 
-    <ImageView
-        android:id="@+id/album_image"
-        android:layout_width="@dimen/album_solo_icon_size"
-        android:layout_height="@dimen/album_solo_icon_size"
-        android:layout_marginTop="@dimen/album_image_top_dimen"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/album_name"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/album_name_top_dimen"
-        android:text="Album name"
-        android:textAlignment="center"
-        android:textSize="@dimen/normal_text_size"
-        app:layout_constraintTop_toBottomOf="@+id/album_image" />
+        android:paddingBottom="@dimen/album_image_top_dimen">
 
-    <TextView
-        android:id="@+id/artist_name"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/album_name_top_dimen"
-        android:text="Artist name"
-        android:textAlignment="center"
-        android:textColor="@color/pink"
-        android:textSize="@dimen/normal_text_size"
-        app:layout_constraintTop_toBottomOf="@+id/album_name" />
+        <ImageView
+            android:id="@+id/album_image"
+            android:layout_width="@dimen/album_solo_icon_size"
+            android:layout_height="@dimen/album_solo_icon_size"
+            android:layout_marginTop="@dimen/album_image_top_dimen"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_view"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginVertical="@dimen/music_list_margin_in_album"
-        app:layout_constraintBottom_toTopOf="@+id/album_date_text_view"
-        app:layout_constraintTop_toBottomOf="@+id/artist_name" />
+        <TextView
+            android:id="@+id/album_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/album_name_top_dimen"
+            android:text="Album name"
+            android:textAlignment="center"
+            android:textSize="@dimen/normal_text_size"
+            app:layout_constraintTop_toBottomOf="@+id/album_image" />
 
-    <TextView
-        android:id="@+id/album_date_text_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/number_in_music_size"
-        android:layout_marginTop="@dimen/album_image_top_dimen"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        <TextView
+            android:id="@+id/artist_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/album_name_top_dimen"
+            android:text="Artist name"
+            android:textAlignment="center"
+            android:textColor="@color/pink"
+            android:textSize="@dimen/normal_text_size"
+            app:layout_constraintTop_toBottomOf="@+id/album_name" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginVertical="@dimen/music_list_margin_in_album"
+            app:layout_constraintTop_toBottomOf="@+id/artist_name" />
+
+        <TextView
+            android:id="@+id/album_date_text_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/number_in_music_size"
+            android:layout_marginTop="@dimen/album_image_top_dimen"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/recycler_view" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

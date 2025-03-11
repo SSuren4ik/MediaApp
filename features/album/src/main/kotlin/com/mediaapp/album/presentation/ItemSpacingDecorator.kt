@@ -1,18 +1,34 @@
 package com.mediaapp.album.presentation
 
 import android.graphics.Canvas
+import android.graphics.Color
 import android.graphics.Paint
+import android.graphics.Rect
+import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 
 class ItemSpacingDecorator(
-    private val lineColor: Int,
-    private val lineWidth: Float,
     private val numberWidthFixed: Int,
 ) : RecyclerView.ItemDecoration() {
 
+    private val lineWidth = 1f
+
     private val paint = Paint().apply {
-        color = lineColor
+        color = Color.GRAY
         strokeWidth = lineWidth
+    }
+
+    override fun getItemOffsets(
+        outRect: Rect,
+        view: View,
+        parent: RecyclerView,
+        state: RecyclerView.State,
+    ) {
+        super.getItemOffsets(outRect, view, parent, state)
+        val position = parent.getChildAdapterPosition(view)
+        if (position == state.itemCount - 1) {
+            outRect.bottom = lineWidth.toInt()
+        }
     }
 
     override fun onDraw(c: Canvas, parent: RecyclerView, state: RecyclerView.State) {

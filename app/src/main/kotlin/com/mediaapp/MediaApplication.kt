@@ -1,6 +1,8 @@
 package com.mediaapp
 
 import android.app.Application
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import com.mediaapp.album.di.AlbumDepsProvider
 import com.mediaapp.album.di.AlbumFeatureComponent
 import com.mediaapp.album.di.DaggerAlbumFeatureComponent
@@ -22,6 +24,11 @@ class MediaApplication : Application(), RegistrationDepsProvider, ResourceProvid
     override fun onCreate() {
         super.onCreate()
         appComponent = DaggerAppComponent.factory().create(this)
+        val channel = NotificationChannel(
+            "running_channel", "Running", NotificationManager.IMPORTANCE_HIGH
+        )
+        val notificationManager = getSystemService(NotificationManager::class.java)
+        notificationManager.createNotificationChannel(channel)
     }
 
     override fun getRegistrationComponent(): RegistrationComponent {

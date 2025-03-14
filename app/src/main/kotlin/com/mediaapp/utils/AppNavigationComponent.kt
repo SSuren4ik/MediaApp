@@ -2,7 +2,6 @@ package com.mediaapp.utils
 
 import android.content.Context
 import android.content.Intent
-import android.os.Bundle
 import com.mediaapp.MainActivity
 import com.mediaapp.album.presentation.AlbumActivity
 import com.mediaapp.core.models.Track

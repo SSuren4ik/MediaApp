@@ -18,7 +18,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.mediaapp.album.databinding.ActivityAlbumBinding
 import com.mediaapp.album.di.AlbumDepsProvider
 import com.mediaapp.album.domain.AlbumData
-import com.mediaapp.album.domain.NetworkRequest
+import com.mediaapp.album.domain.NetworkResponse
 import com.mediaapp.album.presentation.viewmodel.AlbumViewModel
 import com.mediaapp.core.models.Track
 import kotlinx.coroutines.launch
@@ -58,8 +58,8 @@ class AlbumActivity : AppCompatActivity() {
         lifecycleScope.launch {
             viewModel.responseStatus.collect { result ->
                 when (result) {
-                    is NetworkRequest.ErrorConnect -> showToast(result.message)
-                    is NetworkRequest.NormalConnect -> {
+                    is NetworkResponse.ErrorConnect -> showToast(result.message)
+                    is NetworkResponse.Success -> {
                         updateData(result.tracks)
                         binding.albumDateTextView.visibility = View.VISIBLE
                     }

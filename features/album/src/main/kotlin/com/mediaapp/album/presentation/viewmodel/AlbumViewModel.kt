@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mediaapp.album.domain.AlbumData
 import com.mediaapp.album.domain.GetAlbumTracksUseCase
-import com.mediaapp.album.domain.NetworkRequest
+import com.mediaapp.album.domain.NetworkResponse
 import com.mediaapp.core.models.Track
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -16,21 +16,21 @@ class AlbumViewModel : ViewModel() {
     @Inject
     lateinit var getAlbumTracksUseCase: GetAlbumTracksUseCase
 
-    private val _responseStatus = MutableSharedFlow<NetworkRequest>()
-    val responseStatus: SharedFlow<NetworkRequest> = _responseStatus
+    private val _responseStatus = MutableSharedFlow<NetworkResponse>()
+    val responseStatus: SharedFlow<NetworkResponse> = _responseStatus
 
     private lateinit var tracks: List<Track>
 
     fun getTracks(data: AlbumData) {
         viewModelScope.launch {
             if (::tracks.isInitialized) {
-                _responseStatus.emit(NetworkRequest.NormalConnect(tracks))
+                _responseStatus.emit(NetworkResponse.Success(tracks))
                 return@launch
             }
             val result = getAlbumTracksUseCase.execute(data)
             when (result) {
-                is NetworkRequest.ErrorConnect -> _responseStatus.emit(result)
-                is NetworkRequest.NormalConnect -> {
+                is NetworkResponse.ErrorConnect -> _responseStatus.emit(result)
+                is NetworkResponse.Success -> {
                     tracks = result.tracks
                     _responseStatus.emit(result)
                 }

@@ -1,8 +1,8 @@
 package com.mediaapp.home.di
 
+import com.mediaapp.core.api.MediaServiceApi
 import com.mediaapp.core.di.MediaModule
 import com.mediaapp.core.di.NetworkModule
-import com.mediaapp.core.domain.MediaService
 import com.mediaapp.home.data.HomeMediaRepositoryImpl
 import com.mediaapp.home.domain.repository.HomeMediaRepository
 import com.mediaapp.home.domain.usecase.GetNewMusicUseCase
@@ -17,7 +17,7 @@ class HomeFeatureModule {
 
     @Provides
     fun provideMediaRepository(
-        service: MediaService,
+        service: MediaServiceApi,
         @Named("apiKey") apiKey: String,
     ): HomeMediaRepository {
         return HomeMediaRepositoryImpl(service, apiKey)

@@ -62,6 +62,7 @@ class HomeViewModel(
                         error = true
                         return@forEach
                     }
+
                     is NetworkRequest.NormalConnect -> successRequestHandler(request)
                 }
             }

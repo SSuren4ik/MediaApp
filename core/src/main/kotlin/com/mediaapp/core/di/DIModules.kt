@@ -1,7 +1,7 @@
 package com.mediaapp.core.di
 
 import com.mediaapp.core.BuildConfig
-import com.mediaapp.core.domain.MediaService
+import com.mediaapp.core.api.MediaServiceApi
 import dagger.Module
 import dagger.Provides
 import retrofit2.Retrofit
@@ -22,10 +22,10 @@ class NetworkModule {
 
     @Provides
     @Singleton
-    fun provideWeatherService(@Named("baseUrl") baseUrl: String): MediaService {
+    fun provideMediaService(@Named("baseUrl") baseUrl: String): MediaServiceApi {
         return Retrofit.Builder().baseUrl(baseUrl)
             .addConverterFactory(GsonConverterFactory.create()).build()
-            .create(MediaService::class.java)
+            .create(MediaServiceApi::class.java)
     }
 
     @Provides

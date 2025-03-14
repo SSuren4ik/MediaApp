@@ -1,6 +1,6 @@
 package com.mediaapp.home.data
 
-import com.mediaapp.core.domain.MediaService
+import com.mediaapp.core.api.MediaServiceApi
 import com.mediaapp.home.domain.models.NetworkRequest
 import com.mediaapp.home.domain.models.NewMusic
 import com.mediaapp.home.domain.models.PopularMusic
@@ -8,7 +8,7 @@ import com.mediaapp.home.domain.models.TopDownloadsMusic
 import com.mediaapp.home.domain.repository.HomeMediaRepository
 
 class HomeMediaRepositoryImpl(
-    private val service: MediaService,
+    private val service: MediaServiceApi,
     private val apiKey: String,
 ) : HomeMediaRepository {
 

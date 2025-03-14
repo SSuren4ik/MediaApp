@@ -13,8 +13,8 @@ class AlbumView @JvmOverloads constructor(
 
     val iconImage = ImageView(context).apply {
         layoutParams = LayoutParams(
-            resources.getDimension(R.dimen.album_icon_size).toInt(),
-            resources.getDimension(R.dimen.album_icon_size).toInt()
+            resources.getDimension(R.dimen.album_solo_icon_size).toInt(),
+            resources.getDimension(R.dimen.album_solo_icon_size).toInt()
         )
     }
 
@@ -53,7 +53,7 @@ class AlbumView @JvmOverloads constructor(
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        val iconSize = resources.getDimension(R.dimen.album_icon_size).toInt()
+        val iconSize = resources.getDimension(R.dimen.album_solo_icon_size).toInt()
 
         iconImage.measure(
             MeasureSpec.makeMeasureSpec(iconSize, MeasureSpec.EXACTLY),
@@ -79,7 +79,7 @@ class AlbumView @JvmOverloads constructor(
     }
 
     override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
-        val iconSize = resources.getDimension(R.dimen.album_icon_size).toInt()
+        val iconSize = resources.getDimension(R.dimen.album_solo_icon_size).toInt()
 
         iconImage.layout(0, 0, iconSize, iconSize)
 

@@ -10,7 +10,6 @@ import com.bumptech.glide.request.RequestOptions
 import com.mediaapp.core.models.Track
 import com.mediaapp.core.utils.LauncherAlbum
 import com.mediaapp.design_system.databinding.AlbumItemBinding
-import com.mediaapp.home.R
 
 class MusicAdapter(private val launcherAlbum: LauncherAlbum) :
     RecyclerView.Adapter<MusicAdapter.DataViewHolder>() {
@@ -39,13 +38,12 @@ class MusicAdapter(private val launcherAlbum: LauncherAlbum) :
             holder.binding.albumView.setAlbumName(data.name)
             holder.binding.albumView.setArtistName(data.artist_name)
 
-            val cornerRadius = holder.itemView.context.resources.getDimensionPixelSize(com.mediaapp.design_system.R.dimen.corner_radius)
+            val cornerRadius =
+                holder.itemView.context.resources.getDimensionPixelSize(com.mediaapp.design_system.R.dimen.corner_radius)
             val requestOptions = RequestOptions().transform(RoundedCorners(cornerRadius))
 
-            Glide.with(holder.itemView.context.applicationContext)
-                .load(data.album_image)
-                .apply(requestOptions)
-                .into(holder.binding.albumView.iconImage)
+            Glide.with(holder.itemView.context.applicationContext).load(data.album_image)
+                .apply(requestOptions).into(holder.binding.albumView.iconImage)
 
             holder.binding.albumView.setOnClickListener {
                 launcherAlbum.launchAlbum(holder.itemView.context, data)

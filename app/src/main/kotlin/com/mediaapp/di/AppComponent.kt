@@ -1,7 +1,6 @@
 package com.mediaapp.di
 
 import android.app.Application
-import com.mediaapp.album.di.AlbumFeatureComponent
 import com.mediaapp.core.utils.LauncherAlbum
 import com.mediaapp.core.utils.Router
 import com.mediaapp.home.di.HomeDeps

@@ -5,7 +5,7 @@ import com.mediaapp.album.domain.AlbumMediaRepository
 import com.mediaapp.album.domain.GetAlbumTracksUseCase
 import com.mediaapp.core.di.MediaModule
 import com.mediaapp.core.di.NetworkModule
-import com.mediaapp.core.domain.MediaService
+import com.mediaapp.core.api.MediaServiceApi
 import dagger.Module
 import dagger.Provides
 import javax.inject.Named
@@ -15,7 +15,7 @@ class AlbumFeatureModule {
 
     @Provides
     fun provideMediaRepository(
-        service: MediaService,
+        service: MediaServiceApi,
         @Named("apiKey") apiKey: String,
     ): AlbumMediaRepository {
         return AlbumMediaRepositoryImpl(service, apiKey)

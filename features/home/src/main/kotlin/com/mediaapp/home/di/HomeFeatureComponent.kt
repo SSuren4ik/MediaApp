@@ -1,6 +1,6 @@
 package com.mediaapp.home.di
 
-import com.mediaapp.core.utils.LauncherAlbum
+import com.mediaapp.core.utils.AlbumLauncher
 import com.mediaapp.home.presentation.HomeFragment
 import com.mediaapp.home.presentation.viewmodel.HomeViewModel
 import dagger.Component
@@ -21,7 +21,7 @@ interface HomeFeatureComponent {
 }
 
 interface HomeDeps {
-    val launcherAlbum: LauncherAlbum
+    val albumLauncher: AlbumLauncher
 }
 
 interface HomeDepsProvider {

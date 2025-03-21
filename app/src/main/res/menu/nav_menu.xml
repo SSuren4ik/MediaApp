@@ -4,4 +4,9 @@
         android:id="@+id/home"
         android:icon="@drawable/baseline_home_24"
         android:title="Home" />
+
+    <item
+        android:id="@+id/playlist"
+        android:icon="@drawable/baseline_library_music_24"
+        android:title="Playlists" />
 </menu>

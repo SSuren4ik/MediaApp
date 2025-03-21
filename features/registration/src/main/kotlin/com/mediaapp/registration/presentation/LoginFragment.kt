@@ -45,7 +45,8 @@ class LoginFragment : Fragment() {
 
         binding.loginBtn.setOnClickListener {
             binding.loginBtn.isEnabled = false
-            viewModel.loginUser(getEmail(), getPassword())
+            viewModel.loginUser(Email("Test1@mail.ru"), Password("Test123"))
+//            viewModel.loginUser(getEmail(), getPassword())
         }
 
         lifecycleScope.launch {

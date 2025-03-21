@@ -10,4 +10,11 @@
         android:label="Home"
         tools:layout="@layout/fragment_home" />
 
+    <fragment
+        android:id="@+id/playlist"
+        android:name="com.mediaapp.playlist.presentation.PlaylistFragment"
+        android:label="Playlists"
+        tools:layout="@layout/fragment_playlist" />
+
+
 </navigation>

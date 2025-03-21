@@ -44,6 +44,8 @@ dependencies {
     implementation(projects.designSystem)
     implementation(projects.features.home)
     implementation(projects.features.album)
+    implementation(projects.features.musicService)
+    implementation(projects.features.playlist)
 
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.constraintlayout)

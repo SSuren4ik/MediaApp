@@ -9,7 +9,8 @@ class UserRegistrationRepositoryImpl(
 ) : UserRegistrationRepository {
 
     override suspend fun registerUser(userDataModel: SignUpUserDataModel) {
-        firebaseAuthService.registerUser(userDataModel)
+        val result = firebaseAuthService.registerUser(userDataModel)
+        firebaseAuthService.saveUserInStorage(result.user!!.uid, userDataModel)
     }
 
     override suspend fun loginUser(userDataModel: LoginUserDataModel) {

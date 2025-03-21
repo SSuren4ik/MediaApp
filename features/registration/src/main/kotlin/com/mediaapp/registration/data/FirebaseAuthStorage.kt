@@ -1,12 +1,15 @@
 package com.mediaapp.registration.data
 
+import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DatabaseReference
 import com.mediaapp.registration.domain.models.LoginUserDataModel
 import com.mediaapp.registration.domain.models.SignUpUserDataModel
 import kotlinx.coroutines.tasks.await
 
 class FirebaseAuthStorage(
     private val firebaseAuth: FirebaseAuth,
+    private val firebaseDatabase: DatabaseReference,
 ) : AuthStorage {
 
     override suspend fun loginUser(userDataModel: LoginUserDataModel) {
@@ -15,8 +18,13 @@ class FirebaseAuthStorage(
         ).await()
     }
 
-    override suspend fun registerUser(userDataModel: SignUpUserDataModel) {
-        firebaseAuth.createUserWithEmailAndPassword(
+    override suspend fun saveUserInStorage(uid: String, userDataModel: SignUpUserDataModel) {
+        val userInfo = mapOf("email" to userDataModel.email, "username" to userDataModel.userName)
+        firebaseDatabase.child("Users").child(uid).setValue(userInfo).await()
+    }
+
+    override suspend fun registerUser(userDataModel: SignUpUserDataModel): AuthResult {
+        return firebaseAuth.createUserWithEmailAndPassword(
             userDataModel.email.value, userDataModel.password.value
         ).await()
     }

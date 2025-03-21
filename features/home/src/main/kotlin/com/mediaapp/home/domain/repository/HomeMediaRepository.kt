@@ -1,9 +1,11 @@
 package com.mediaapp.home.domain.repository
 
-import com.mediaapp.home.domain.models.NetworkRequest
+import com.mediaapp.home.domain.models.NewMusic
+import com.mediaapp.home.domain.models.PopularMusic
+import com.mediaapp.home.domain.models.TopDownloadsMusic
 
 interface HomeMediaRepository {
-    suspend fun getPopularMusic(): NetworkRequest
-    suspend fun getNewMusic(): NetworkRequest
-    suspend fun getTopDownloadsMusic(): NetworkRequest
+    suspend fun getPopularMusic(offset: Int, limit: Int): PopularMusic
+    suspend fun getNewMusic(offset: Int, limit: Int): NewMusic
+    suspend fun getTopDownloadsMusic(offset: Int, limit: Int): TopDownloadsMusic
 }

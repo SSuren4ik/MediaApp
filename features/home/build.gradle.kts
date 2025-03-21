@@ -43,8 +43,10 @@ dependencies {
     implementation(libs.dagger)
     kapt(libs.dagger.compiler)
 
-    implementation (libs.glide)
+    implementation(libs.glide)
     kapt(libs.compiler)
+
+    implementation(libs.retrofit)
 
     implementation(libs.androidx.constraintlayout)
 }

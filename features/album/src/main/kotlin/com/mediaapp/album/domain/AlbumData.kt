@@ -1,3 +1,3 @@
 package com.mediaapp.album.domain
 
-data class AlbumData(val albumName: String)
+data class AlbumData(val albumId: Int)

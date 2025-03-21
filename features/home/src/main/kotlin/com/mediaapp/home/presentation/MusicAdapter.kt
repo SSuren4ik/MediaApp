@@ -8,10 +8,10 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.mediaapp.core.models.Track
-import com.mediaapp.core.utils.LauncherAlbum
+import com.mediaapp.core.utils.AlbumLauncher
 import com.mediaapp.design_system.databinding.AlbumItemBinding
 
-class MusicAdapter(private val launcherAlbum: LauncherAlbum) :
+class MusicAdapter(private val albumLauncher: AlbumLauncher) :
     RecyclerView.Adapter<MusicAdapter.DataViewHolder>() {
 
     private var dataList: List<Track> = emptyList()
@@ -46,7 +46,7 @@ class MusicAdapter(private val launcherAlbum: LauncherAlbum) :
                 .apply(requestOptions).into(holder.binding.albumView.iconImage)
 
             holder.binding.albumView.setOnClickListener {
-                launcherAlbum.launchAlbum(holder.itemView.context, data)
+                albumLauncher.launchAlbum(holder.itemView.context, data)
             }
         }
     }

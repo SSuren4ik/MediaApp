@@ -14,9 +14,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.HORIZONTAL
 import com.mediaapp.core.models.Track
-import com.mediaapp.core.utils.LauncherAlbum
+import com.mediaapp.core.utils.AlbumLauncher
 import com.mediaapp.core.utils.ResourceProvider
-import com.mediaapp.home.R
 import com.mediaapp.home.databinding.FragmentHomeBinding
 import com.mediaapp.home.di.HomeDepsProvider
 import com.mediaapp.home.domain.models.ResponseStatus
@@ -28,7 +27,7 @@ import javax.inject.Inject
 class HomeFragment : Fragment() {
 
     @Inject
-    lateinit var router: LauncherAlbum
+    lateinit var router: AlbumLauncher
 
     private lateinit var binding: FragmentHomeBinding
     private val popularMusicAdapter: MusicAdapter by lazy { MusicAdapter(router) }
@@ -105,6 +104,23 @@ class HomeFragment : Fragment() {
         val spacingInPixels =
             resources.getDimensionPixelSize(com.mediaapp.design_system.R.dimen.item_spacing)
         recyclerView.addItemDecoration(ItemSpacingDecorator(spacingInPixels))
+
+        recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                val layoutManager = recyclerView.layoutManager as LinearLayoutManager
+                val visibleItemCount = layoutManager.childCount
+                val totalItemCount = layoutManager.itemCount
+                val pastVisibleItemsFirstIndex = layoutManager.findFirstVisibleItemPosition()
+
+                if ((pastVisibleItemsFirstIndex + visibleItemCount) >= totalItemCount * 0.5) {
+                    when (adapter) {
+                        popularMusicAdapter -> viewModel.loadMorePopularMusic()
+                        newMusicAdapter -> viewModel.loadMoreNewMusic()
+                        topDownloadsMusicAdapter -> viewModel.loadMoreTopDownloadsMusic()
+                    }
+                }
+            }
+        })
     }
 
     private fun updateMusicData(data: ResponseStatus.SuccessResponse) {

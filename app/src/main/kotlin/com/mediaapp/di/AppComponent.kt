@@ -1,7 +1,9 @@
 package com.mediaapp.di
 
 import android.app.Application
-import com.mediaapp.core.utils.LauncherAlbum
+import com.mediaapp.album.di.AlbumDeps
+import com.mediaapp.core.utils.AlbumLauncher
+import com.mediaapp.core.utils.MusicServiceLauncher
 import com.mediaapp.core.utils.Router
 import com.mediaapp.home.di.HomeDeps
 import com.mediaapp.registration.di.RegistrationDeps
@@ -11,11 +13,12 @@ import javax.inject.Singleton
 
 @Singleton
 @Component(modules = [AppModule::class])
-interface AppComponent : RegistrationDeps, HomeDeps {
+interface AppComponent : RegistrationDeps, HomeDeps, AlbumDeps {
 
     override val styleResources: Int
     override val router: Router
-    override val launcherAlbum: LauncherAlbum
+    override val albumLauncher: AlbumLauncher
+    override val musicServiceLauncher: MusicServiceLauncher
 
     @Component.Factory
     interface Factory {

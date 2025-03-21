@@ -1,5 +1,8 @@
 package com.mediaapp.core.di
 
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
 import com.mediaapp.core.BuildConfig
 import com.mediaapp.core.api.MediaServiceApi
 import dagger.Module
@@ -30,5 +33,18 @@ class NetworkModule {
 
     @Provides
     @Named("baseUrl")
-    fun provideBaseUrl(): String = "https://api.jamendo.com/v3.0/"
+    fun provideBaseUrl() = BuildConfig.JAMENDO_API
+}
+
+@Module
+class FirebaseModule {
+
+    @Provides
+    @Singleton
+    fun provideFirebaseAuthInstance(): FirebaseAuth = FirebaseAuth.getInstance()
+
+    @Provides
+    @Singleton
+    fun provideFirebaseDatabaseInstance(): DatabaseReference =
+        FirebaseDatabase.getInstance(BuildConfig.FIREBASE_DATABASE_URL).reference
 }

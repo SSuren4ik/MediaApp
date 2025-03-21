@@ -5,9 +5,11 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.mediaapp.core.models.Track
+import com.mediaapp.core.utils.MusicServiceLauncher
 import com.mediaapp.design_system.databinding.MusicInAlbumItemBinding
 
-class AlbumRecyclerViewAdapter : RecyclerView.Adapter<AlbumRecyclerViewAdapter.DataViewHolder>() {
+class AlbumRecyclerViewAdapter(private val musicServiceLauncher: MusicServiceLauncher) :
+    RecyclerView.Adapter<AlbumRecyclerViewAdapter.DataViewHolder>() {
 
     private var dataList: List<Track> = emptyList()
 
@@ -33,5 +35,12 @@ class AlbumRecyclerViewAdapter : RecyclerView.Adapter<AlbumRecyclerViewAdapter.D
         val data = dataList[position]
         holder.binding.musicView.setMusicName(data.name)
         holder.binding.musicView.setMusicNumber((position + 1).toString())
+        holder.binding.musicView.setOnClickListener {
+            musicServiceLauncher.startMusicService(holder.itemView.context, data.audio)
+        }
+        holder.binding.musicView.setOnLongClickListener {
+            TODO()
+            true
+        }
     }
 }

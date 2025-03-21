@@ -7,6 +7,7 @@ import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
@@ -21,15 +22,23 @@ import com.mediaapp.album.domain.AlbumData
 import com.mediaapp.album.domain.NetworkResponse
 import com.mediaapp.album.presentation.viewmodel.AlbumViewModel
 import com.mediaapp.core.models.Track
+import com.mediaapp.core.utils.MusicServiceLauncher
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Locale
+import javax.inject.Inject
 
 class AlbumActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityAlbumBinding
     private val viewModel: AlbumViewModel by viewModels()
-    private val adapter = AlbumRecyclerViewAdapter()
+
+    @Inject
+    lateinit var musicServiceLauncher: MusicServiceLauncher
+
+    private val adapter: AlbumRecyclerViewAdapter by lazy {
+        AlbumRecyclerViewAdapter(musicServiceLauncher)
+    }
     private val diffCallback = AlbumDiffCallback()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,12 +52,17 @@ class AlbumActivity : AppCompatActivity() {
         binding.albumDateTextView.visibility = View.GONE
         observeAlbumTracks()
         getAlbumTracks()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            ActivityCompat.requestPermissions(
+                this, arrayOf(android.Manifest.permission.POST_NOTIFICATIONS), 0
+            )
+        }
     }
 
     private fun getAlbumTracks() {
         val track = getTrack()
         if (track != null) {
-            val albumData = AlbumData(track.album_name)
+            val albumData = AlbumData(track.album_id)
             showAlbumData(track)
             viewModel.getTracks(albumData)
         }
@@ -104,6 +118,7 @@ class AlbumActivity : AppCompatActivity() {
     private fun initDI() {
         val albumComponent = (application as AlbumDepsProvider).getAlbumComponent()
         albumComponent.inject(viewModel)
+        albumComponent.inject(this)
     }
 
     private fun showToast(message: String) {

@@ -4,4 +4,6 @@
     <string name="new_releases_tittle_text">Новые релизы</string>
     <string name="top_popular_tittle_text">Чарты</string>
     <string name="network_error_text">Ошибка сети</string>
+    <string name="http_error_text">Ошибка HTTP</string>
+    <string name="unknown_error_text">Неизвестная ошибка</string>
 </resources>

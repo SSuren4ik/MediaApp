@@ -5,10 +5,10 @@ import android.content.Intent
 import com.mediaapp.MainActivity
 import com.mediaapp.album.presentation.AlbumActivity
 import com.mediaapp.core.models.Track
-import com.mediaapp.core.utils.LauncherAlbum
+import com.mediaapp.core.utils.AlbumLauncher
 import com.mediaapp.registration.utils.RegistrationRouter
 
-class AppNavigationComponent : RegistrationRouter, LauncherAlbum {
+class AppNavigationComponent : RegistrationRouter, AlbumLauncher {
     override fun navigateToMainActivity(context: Context) {
         context.startActivity(Intent(context, MainActivity::class.java))
     }

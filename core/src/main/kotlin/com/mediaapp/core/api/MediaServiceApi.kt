@@ -11,8 +11,9 @@ interface MediaServiceApi {
         @Query("client_id") apiKey: String,
         @Query("format") format: String = "json",
         @Query("boost") boost: String = "popularity_month",
-        @Query("limit") limit: Int = 20,
+        @Query("limit") limit: Int = 10,
         @Query("include") include: String = "musicinfo",
+        @Query("offset") offset: Int = 0,
     ): MediaResponse
 
     @GET("tracks")
@@ -20,9 +21,10 @@ interface MediaServiceApi {
         @Query("client_id") apiKey: String,
         @Query("format") format: String = "json",
         @Query("order") order: String = "releasedate_desc",
-        @Query("limit") limit: Int = 20,
+        @Query("limit") limit: Int = 10,
         @Query("include") include: String = "musicinfo",
         @Query("groupby") groupby: String = "album_id",
+        @Query("offset") offset: Int = 0,
     ): MediaResponse
 
     @GET("tracks")
@@ -30,14 +32,17 @@ interface MediaServiceApi {
         @Query("client_id") apiKey: String,
         @Query("format") format: String = "json",
         @Query("order") order: String = "downloads_month_desc",
-        @Query("limit") limit: Int = 20,
+        @Query("limit") limit: Int = 10,
+        @Query("include") include: String = "musicinfo",
+        @Query("offset") offset: Int = 0,
+    ): MediaResponse
+
+    @GET("tracks")
+    suspend fun getAlbumTracksWithLinks(
+        @Query("client_id") apiKey: String,
+        @Query("album_id") albumId: Int,
+        @Query("format") format: String = "json",
         @Query("include") include: String = "musicinfo",
     ): MediaResponse
 
-    @GET("albums")
-    suspend fun getAlbumTracks(
-        @Query("client_id") apiKey: String,
-        @Query("namesearch") albumName: String,
-        @Query("format") format: String = "json",
-    ): MediaResponse
 }

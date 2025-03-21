@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
@@ -29,6 +31,7 @@ android {
     }
     buildFeatures {
         viewBinding = true
+        buildConfig = true
     }
 }
 
@@ -44,8 +47,7 @@ dependencies {
 
     implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.core.splashscreen)
-    
-    implementation(platform(libs.firebase.bom))
-    implementation(libs.firebase.analytics)
+
     implementation(libs.firebase.auth)
+    implementation(libs.firebase.database)
 }

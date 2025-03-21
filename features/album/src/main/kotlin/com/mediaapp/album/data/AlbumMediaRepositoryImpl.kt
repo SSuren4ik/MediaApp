@@ -12,7 +12,7 @@ class AlbumMediaRepositoryImpl(
 
     override suspend fun getAlbumTracks(data: AlbumData): NetworkResponse {
         return try {
-            val musicData = service.getAlbumTracks(apiKey, data.albumName)
+            val musicData = service.getAlbumTracksWithLinks(apiKey, data.albumId)
             NetworkResponse.Success(musicData.results)
         } catch (e: Exception) {
             NetworkResponse.ErrorConnect("Проблемы с сетью")

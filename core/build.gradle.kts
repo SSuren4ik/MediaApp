@@ -14,6 +14,8 @@ android {
     defaultConfig {
         minSdk = 26
         buildConfigField("String", "API_KEY", getApiKey())
+        buildConfigField("String", "FIREBASE_DATABASE_URL", getFirebaseURL())
+        buildConfigField("String", "JAMENDO_API", getJamendoURL())
     }
 
     buildTypes {
@@ -42,10 +44,15 @@ dependencies {
     implementation(libs.androidx.core)
 
     implementation(libs.converter.gson)
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.auth)
+    implementation(libs.firebase.database)
 
     implementation(libs.dagger)
     kapt(libs.dagger.compiler)
+
     implementation(libs.retrofit)
+
     implementation(libs.androidx.constraintlayout)
 }
 
@@ -54,4 +61,16 @@ fun getApiKey(): String {
     file("../local.properties").inputStream().use { properties.load(it) }
     val key = properties.getProperty("API_KEY", "")
     return key
+}
+
+fun getFirebaseURL(): String {
+    val properties = Properties()
+    file("../local.properties").inputStream().use { properties.load(it) }
+    return properties.getProperty("FIREBASE_DATABASE_URL", "")
+}
+
+fun getJamendoURL(): String {
+    val properties = Properties()
+    file("../local.properties").inputStream().use { properties.load(it) }
+    return properties.getProperty("JAMENDO_API", "")
 }

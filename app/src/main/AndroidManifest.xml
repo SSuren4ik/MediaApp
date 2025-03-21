@@ -2,6 +2,9 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <application
         android:name=".MediaApplication"
@@ -29,6 +32,10 @@
         <activity
             android:name=".album.presentation.AlbumActivity"
             android:exported="false" />
+
+        <service
+            android:name=".music_service.presentation.MusicService"
+            android:foregroundServiceType="mediaPlayback" />
     </application>
 
 </manifest>

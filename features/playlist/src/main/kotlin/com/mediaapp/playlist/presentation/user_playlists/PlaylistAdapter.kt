@@ -1,4 +1,4 @@
-package com.mediaapp.playlist.presentation
+package com.mediaapp.playlist.presentation.user_playlists
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -10,11 +10,12 @@ import com.bumptech.glide.request.RequestOptions
 import com.mediaapp.core.models.PlaylistData
 import com.mediaapp.design_system.databinding.PlaylistItemBinding
 
-class PlaylistAdapter : RecyclerView.Adapter<PlaylistAdapter.DataViewHolder>() {
+class PlaylistAdapter(private val onItemClick: (String) -> Unit) :
+    RecyclerView.Adapter<PlaylistAdapter.DataViewHolder>() {
 
     private var dataList: List<PlaylistData> = emptyList()
 
-    fun setData(newDataList: List<PlaylistData>, playlistDiffCallback: PlaylistDiffCallback) {
+    fun setData(newDataList: List<PlaylistData>, playlistDiffCallback: UserPlaylistsDiffCallback) {
         playlistDiffCallback.setData(dataList, newDataList)
         val diffResult = DiffUtil.calculateDiff(playlistDiffCallback)
         dataList = newDataList
@@ -33,22 +34,19 @@ class PlaylistAdapter : RecyclerView.Adapter<PlaylistAdapter.DataViewHolder>() {
 
     override fun onBindViewHolder(holder: DataViewHolder, position: Int) {
         val data = dataList[position]
-        holder.binding.playlistView.setPlaylistName(data.playlistName)
-        holder.binding.playlistView.setAuthorName(data.authorName)
+        with(holder.binding.playlistView) {
+            setPlaylistName(data.playlistName)
+            setAuthorName(data.authorName)
+            setOnClickListener { onItemClick(data.playlistName) }
 
-        val cornerRadius =
-            holder.itemView.context.resources.getDimensionPixelSize(com.mediaapp.design_system.R.dimen.corner_radius)
-        val requestOptions = RequestOptions().transform(RoundedCorners(cornerRadius))
+            val context = holder.itemView.context
+            val cornerRadius =
+                context.resources.getDimensionPixelSize(com.mediaapp.design_system.R.dimen.corner_radius)
+            val requestOptions = RequestOptions().transform(RoundedCorners(cornerRadius))
 
-        if (data.image.isNotEmpty()) {
-            holder.binding.playlistView.setPlaylistName(data.playlistName)
-
-            Glide.with(holder.itemView.context.applicationContext).load(data.image)
+            Glide.with(context.applicationContext)
+                .load(data.image.ifEmpty { com.mediaapp.music_service.R.drawable.img })
                 .apply(requestOptions).into(holder.binding.playlistView.iconImage)
-        } else {
-            Glide.with(holder.itemView.context.applicationContext)
-                .load(com.mediaapp.music_service.R.drawable.img).apply(requestOptions)
-                .into(holder.binding.playlistView.iconImage)
         }
     }
 }

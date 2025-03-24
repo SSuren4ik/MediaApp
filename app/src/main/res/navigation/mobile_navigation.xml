@@ -12,7 +12,7 @@
 
     <fragment
         android:id="@+id/playlist"
-        android:name="com.mediaapp.playlist.presentation.PlaylistFragment"
+        android:name="com.mediaapp.playlist.presentation.user_playlists.UserPlaylistsFragment"
         android:label="Playlists"
         tools:layout="@layout/fragment_playlist" />
 

@@ -1,9 +1,9 @@
-package com.mediaapp.playlist.presentation
+package com.mediaapp.playlist.presentation.user_playlists
 
 import androidx.recyclerview.widget.DiffUtil
 import com.mediaapp.core.models.PlaylistData
 
-class PlaylistDiffCallback : DiffUtil.Callback() {
+class UserPlaylistsDiffCallback : DiffUtil.Callback() {
 
     private var oldDataList: MutableList<PlaylistData> = mutableListOf()
     private var newDataList: MutableList<PlaylistData> = mutableListOf()
@@ -16,9 +16,13 @@ class PlaylistDiffCallback : DiffUtil.Callback() {
         newDataList.addAll(newItems)
     }
 
-    override fun getOldListSize(): Int = oldDataList.size
+    override fun getOldListSize(): Int {
+        return oldDataList.size
+    }
 
-    override fun getNewListSize(): Int = newDataList.size
+    override fun getNewListSize(): Int {
+        return newDataList.size
+    }
 
     override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
         return oldDataList[oldItemPosition].playlistName == newDataList[newItemPosition].playlistName

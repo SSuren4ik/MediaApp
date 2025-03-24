@@ -7,7 +7,6 @@ import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
@@ -52,11 +51,6 @@ class AlbumActivity : AppCompatActivity() {
         binding.albumDateTextView.visibility = View.GONE
         observeAlbumTracks()
         getAlbumTracks()
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            ActivityCompat.requestPermissions(
-                this, arrayOf(android.Manifest.permission.POST_NOTIFICATIONS), 0
-            )
-        }
     }
 
     private fun getAlbumTracks() {

@@ -1,4 +1,4 @@
-package com.mediaapp.playlist.presentation.viewmodel
+package com.mediaapp.playlist.presentation.user_playlists.viewmodel
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
@@ -6,13 +6,14 @@ import androidx.lifecycle.viewModelScope
 import com.mediaapp.core.models.PlaylistData
 import com.mediaapp.playlist.domain.usecase.CreatePlaylistUseCase
 import com.mediaapp.playlist.domain.usecase.GetUserPlaylistsUseCase
+import com.mediaapp.playlist.domain.usecase.UpdatePlaylistNameUseCase
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class PlaylistViewModel : ViewModel() {
+class UserPlaylistsViewModel : ViewModel() {
 
     @Inject
     lateinit var createPlaylistUseCase: CreatePlaylistUseCase

@@ -1,29 +1,46 @@
-package com.mediaapp.playlist.presentation
+package com.mediaapp.playlist.presentation.user_playlists
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView.VERTICAL
-import com.mediaapp.core.models.PlaylistData
 import com.mediaapp.playlist.databinding.FragmentPlaylistBinding
 import com.mediaapp.playlist.di.PlaylistComponentProvider
-import com.mediaapp.playlist.presentation.viewmodel.PlaylistViewModel
+import com.mediaapp.playlist.presentation.playlist_screen.PlaylistActivity
+import com.mediaapp.playlist.presentation.playlist_screen.PlaylistItemDecorator
+import com.mediaapp.playlist.presentation.user_playlists.viewmodel.UserPlaylistsViewModel
 import kotlinx.coroutines.launch
 
-class PlaylistFragment : Fragment() {
+class UserPlaylistsFragment : Fragment() {
 
     private lateinit var binding: FragmentPlaylistBinding
-    private val adapter: PlaylistAdapter by lazy { PlaylistAdapter() }
+    private val viewModel: UserPlaylistsViewModel by viewModels()
+    private var playlistDiffCallback = UserPlaylistsDiffCallback()
 
-    private val viewModel: PlaylistViewModel by viewModels()
+    private val playlistActivityLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                viewModel.getUserPlaylists()
+            }
+        }
+
+    private val adapter: PlaylistAdapter by lazy {
+        PlaylistAdapter { playlistName ->
+            val intent = Intent(requireContext(), PlaylistActivity::class.java).apply {
+                putExtra("playlistName", playlistName)
+            }
+            playlistActivityLauncher.launch(intent)
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -38,7 +55,7 @@ class PlaylistFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         initDI()
         setInsets()
-        initRecyclerViews()
+        initRecyclerView()
         observeUserPlaylists()
         viewModel.getUserPlaylists()
 
@@ -49,12 +66,8 @@ class PlaylistFragment : Fragment() {
 
     private fun setInsets() {
         ViewCompat.setOnApplyWindowInsetsListener(binding.playlistTitle) { view, insets ->
-            val innerPadding = insets.getInsets(
-                WindowInsetsCompat.Type.systemBars()
-            )
-            view.setPadding(
-                0, innerPadding.top, 0, 0
-            )
+            val innerPadding = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            view.setPadding(0, innerPadding.top, 0, 0)
             insets
         }
     }
@@ -62,7 +75,7 @@ class PlaylistFragment : Fragment() {
     private fun observeUserPlaylists() {
         lifecycleScope.launch {
             viewModel.responseStatus.collect { result ->
-                adapter.setData(result, PlaylistDiffCallback())
+                adapter.setData(result, playlistDiffCallback)
             }
         }
         lifecycleScope.launch {
@@ -76,11 +89,15 @@ class PlaylistFragment : Fragment() {
         val playlistComponent =
             (requireActivity().application as PlaylistComponentProvider).getPlaylistComponent()
         playlistComponent.inject(viewModel)
-        playlistComponent.inject(this)
     }
 
-    private fun initRecyclerViews() {
-        binding.recyclerView.layoutManager = LinearLayoutManager(requireContext(), VERTICAL, false)
+    private fun initRecyclerView() {
+        binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerView.adapter = adapter
+        binding.recyclerView.addItemDecoration(
+            ItemSpacingDecorator(
+                resources.getDimensionPixelSize(com.mediaapp.design_system.R.dimen.playlist_top_margin)
+            )
+        )
     }
 }

@@ -47,6 +47,6 @@ class MediaApplication : Application(), RegistrationDepsProvider, ResourceProvid
     }
 
     override fun getPlaylistComponent(): PlaylistFeatureComponent {
-        return DaggerPlaylistFeatureComponent.builder().build()
+        return DaggerPlaylistFeatureComponent.builder().deps(appComponent).build()
     }
 }

@@ -1,11 +1,14 @@
 package com.mediaapp.playlist.domain.repository
 
 import com.mediaapp.core.models.PlaylistData
-import com.mediaapp.core.models.Track
 
 interface PlaylistRepository {
 
-    suspend fun createPlaylist(playlistDataModel: PlaylistData)
+    suspend fun createPlaylist(playlistName: String)
 
-    suspend fun addTrackToPlaylist(track: Track, userDataModel: PlaylistData)
+    suspend fun getUserPlaylists(): List<PlaylistData>
+
+    suspend fun updatePlaylistName(playlistNewName: String, playlistOldName: String)
+
+    suspend fun getPlaylistTracks(playlistId: String): PlaylistData
 }

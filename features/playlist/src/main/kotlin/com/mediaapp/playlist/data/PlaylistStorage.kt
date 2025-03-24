@@ -1,11 +1,14 @@
 package com.mediaapp.playlist.data
 
 import com.mediaapp.core.models.PlaylistData
-import com.mediaapp.core.models.Track
 
 interface PlaylistStorage {
 
-    suspend fun createPlaylist(playlistDataModel: PlaylistData)
+    suspend fun createPlaylist(playlistName: String)
 
-    suspend fun addTrackToPlaylist(track: Track, playlistDataModel: PlaylistData)
+    suspend fun getUserPlaylists(): List<PlaylistData>
+
+    suspend fun updatePlaylistName(playlistNewName: String, playlistOldName: String)
+
+    suspend fun getPlaylistTracks(playlistId: String): PlaylistData
 }

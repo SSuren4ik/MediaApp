@@ -8,7 +8,10 @@
     <dimen name="margin_between_textview">3sp</dimen>
     <dimen name="music_name_in_album_size">6sp</dimen>
     <dimen name="number_in_music_size">40sp</dimen>
+    <dimen name="playlist_top_margin">5sp</dimen>
     <dimen name="album_list_icon_size">120sp</dimen>
+    <dimen name="playlist_icon_size">80sp</dimen>
+    <dimen name="playlist_text_left_margin">5sp</dimen>
     <dimen name="album_solo_icon_size">250sp</dimen>
     <dimen name="corner_radius">10sp</dimen>
     <dimen name="album_name_top_dimen">10sp</dimen>

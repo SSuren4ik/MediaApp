@@ -19,13 +19,19 @@ class FirebaseAuthStorage(
     }
 
     override suspend fun saveUserInStorage(uid: String, userDataModel: SignUpUserDataModel) {
-        val userInfo = mapOf("email" to userDataModel.email, "username" to userDataModel.userName)
+        val userInfo =
+            mapOf("email" to userDataModel.email.value, "username" to userDataModel.userName.value)
         firebaseDatabase.child("Users").child(uid).setValue(userInfo).await()
     }
 
     override suspend fun registerUser(userDataModel: SignUpUserDataModel): AuthResult {
-        return firebaseAuth.createUserWithEmailAndPassword(
+        val result = firebaseAuth.createUserWithEmailAndPassword(
             userDataModel.email.value, userDataModel.password.value
         ).await()
+        val uid = result.user?.uid
+        if (uid != null) {
+            saveUserInStorage(uid, userDataModel)
+        }
+        return result
     }
 }

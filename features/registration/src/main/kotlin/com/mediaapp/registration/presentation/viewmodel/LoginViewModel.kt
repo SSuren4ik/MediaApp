@@ -14,6 +14,7 @@ import com.mediaapp.registration.domain.models.Password
 import com.mediaapp.registration.domain.models.ResponseStatusModel
 import com.mediaapp.registration.domain.usecase.LoginUserUseCase
 import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.launch
@@ -41,7 +42,7 @@ class LoginViewModel(
     }
 
     fun loginUser(email: Email, password: Password) {
-        viewModelScope.launch(exceptionHandler) {
+        viewModelScope.launch(exceptionHandler + Dispatchers.IO) {
             if (areFieldsEmpty(email, password)) {
                 emitErrorMessage(getString(R.string.field_is_empty))
                 return@launch

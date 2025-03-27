@@ -20,4 +20,5 @@
     <dimen name="title_start_dimen">10sp</dimen>
     <dimen name="item_spacing">10sp</dimen>
     <dimen name="music_name_border_width">1sp</dimen>
+    <dimen name="music_list_margin_in_album">40dp</dimen>
 </resources>

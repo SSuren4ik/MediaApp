@@ -6,6 +6,7 @@ import com.mediaapp.album.domain.AlbumData
 import com.mediaapp.album.domain.GetAlbumTracksUseCase
 import com.mediaapp.album.domain.NetworkResponse
 import com.mediaapp.core.models.Track
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.launch
@@ -22,7 +23,7 @@ class AlbumViewModel : ViewModel() {
     private lateinit var tracks: List<Track>
 
     fun getTracks(data: AlbumData) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             if (::tracks.isInitialized) {
                 _responseStatus.emit(NetworkResponse.Success(tracks))
                 return@launch

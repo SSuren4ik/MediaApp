@@ -9,4 +9,9 @@
         android:id="@+id/playlist"
         android:icon="@drawable/baseline_library_music_24"
         android:title="Playlists" />
+
+    <item
+        android:id="@+id/search_music"
+        android:icon="@drawable/baseline_search_24"
+        android:title="SearchMusic" />
 </menu>

@@ -7,6 +7,7 @@ import com.mediaapp.playlist.data.FirebasePlaylistStorageImpl
 import com.mediaapp.playlist.data.PlaylistRepositoryImpl
 import com.mediaapp.playlist.data.PlaylistStorage
 import com.mediaapp.playlist.domain.repository.PlaylistRepository
+import com.mediaapp.playlist.domain.usecase.AddTrackPlaylistUseCase
 import com.mediaapp.playlist.domain.usecase.CreatePlaylistUseCase
 import com.mediaapp.playlist.domain.usecase.GetPlaylistTracksUseCase
 import com.mediaapp.playlist.domain.usecase.GetUserPlaylistsUseCase
@@ -54,4 +55,10 @@ class PlaylistModule {
     fun providesGetPlaylistTracksUseCase(
         playlistRepository: PlaylistRepository,
     ): GetPlaylistTracksUseCase = GetPlaylistTracksUseCase(playlistRepository)
+
+    @Provides
+    @Singleton
+    fun providesAddTrackPlaylistUseCase(
+        playlistRepository: PlaylistRepository,
+    ): AddTrackPlaylistUseCase = AddTrackPlaylistUseCase(playlistRepository)
 }

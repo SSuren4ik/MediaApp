@@ -1,6 +1,7 @@
 package com.mediaapp.playlist.domain.repository
 
 import com.mediaapp.core.models.PlaylistData
+import com.mediaapp.core.models.Track
 
 interface PlaylistRepository {
 
@@ -10,5 +11,7 @@ interface PlaylistRepository {
 
     suspend fun updatePlaylistName(playlistNewName: String, playlistOldName: String)
 
-    suspend fun getPlaylistTracks(playlistId: String): PlaylistData
+    suspend fun getPlaylistTracks(playlistName: String): PlaylistData
+
+    suspend fun addTrackToPlaylist(playlistName: String, track: Track)
 }

@@ -14,6 +14,7 @@ import com.mediaapp.registration.domain.models.SignUpUserDataModel
 import com.mediaapp.registration.domain.models.UserName
 import com.mediaapp.registration.domain.usecase.SignUpUserUseCase
 import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.launch
@@ -40,7 +41,7 @@ class SignUpViewModel(
     }
 
     fun registerUser(email: Email, username: UserName, password: Password) {
-        viewModelScope.launch(exceptionHandler) {
+        viewModelScope.launch(exceptionHandler + Dispatchers.IO) {
             if (areFieldsEmpty(email, username, password)) {
                 emitErrorMessage(getString(R.string.field_is_empty))
                 return@launch

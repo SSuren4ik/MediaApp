@@ -6,6 +6,7 @@ import com.mediaapp.core.utils.AlbumLauncher
 import com.mediaapp.core.utils.MusicServiceLauncher
 import com.mediaapp.core.utils.Router
 import com.mediaapp.home.di.HomeDeps
+import com.mediaapp.music_search.di.SearchDeps
 import com.mediaapp.playlist.di.PlaylistDeps
 import com.mediaapp.registration.di.RegistrationDeps
 import dagger.BindsInstance
@@ -14,7 +15,7 @@ import javax.inject.Singleton
 
 @Singleton
 @Component(modules = [AppModule::class])
-interface AppComponent : RegistrationDeps, HomeDeps, AlbumDeps, PlaylistDeps {
+interface AppComponent : RegistrationDeps, HomeDeps, AlbumDeps, PlaylistDeps, SearchDeps {
 
     override val styleResources: Int
     override val router: Router

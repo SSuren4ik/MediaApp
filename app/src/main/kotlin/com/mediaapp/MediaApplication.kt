@@ -12,15 +12,18 @@ import com.mediaapp.di.DaggerAppComponent
 import com.mediaapp.home.di.DaggerHomeFeatureComponent
 import com.mediaapp.home.di.HomeDepsProvider
 import com.mediaapp.home.di.HomeFeatureComponent
+import com.mediaapp.music_search.di.DaggerSearchFeatureComponent
+import com.mediaapp.music_search.di.SearchDepsProvider
+import com.mediaapp.music_search.di.SearchFeatureComponent
 import com.mediaapp.playlist.di.DaggerPlaylistFeatureComponent
+import com.mediaapp.playlist.di.PlaylistDepsProvider
 import com.mediaapp.playlist.di.PlaylistFeatureComponent
-import com.mediaapp.playlist.di.PlaylistComponentProvider
 import com.mediaapp.registration.di.DaggerRegistrationComponent
 import com.mediaapp.registration.di.RegistrationComponent
 import com.mediaapp.registration.di.RegistrationDepsProvider
 
 class MediaApplication : Application(), RegistrationDepsProvider, ResourceProvider,
-    HomeDepsProvider, AlbumDepsProvider, PlaylistComponentProvider {
+    HomeDepsProvider, AlbumDepsProvider, PlaylistDepsProvider, SearchDepsProvider {
 
     private lateinit var appComponent: AppComponent
 
@@ -48,5 +51,9 @@ class MediaApplication : Application(), RegistrationDepsProvider, ResourceProvid
 
     override fun getPlaylistComponent(): PlaylistFeatureComponent {
         return DaggerPlaylistFeatureComponent.builder().deps(appComponent).build()
+    }
+
+    override fun getSearchComponent(): SearchFeatureComponent {
+        return DaggerSearchFeatureComponent.builder().deps(appComponent).build()
     }
 }

@@ -1,15 +1,20 @@
 package com.mediaapp.album.presentation
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import android.widget.PopupMenu
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.mediaapp.core.models.Track
 import com.mediaapp.core.utils.MusicServiceLauncher
+import com.mediaapp.core.utils.PlaylistHostLauncher
 import com.mediaapp.design_system.databinding.MusicInAlbumItemBinding
 
-class AlbumRecyclerViewAdapter(private val musicServiceLauncher: MusicServiceLauncher) :
-    RecyclerView.Adapter<AlbumRecyclerViewAdapter.DataViewHolder>() {
+class AlbumRecyclerViewAdapter(
+    private val musicServiceLauncher: MusicServiceLauncher,
+    private val playlistHostLauncher: PlaylistHostLauncher,
+) : RecyclerView.Adapter<AlbumRecyclerViewAdapter.DataViewHolder>() {
 
     private var dataList: List<Track> = emptyList()
 
@@ -39,8 +44,26 @@ class AlbumRecyclerViewAdapter(private val musicServiceLauncher: MusicServiceLau
             musicServiceLauncher.startMusicService(holder.itemView.context, data.audio)
         }
         holder.binding.musicView.setOnLongClickListener {
-            TODO()
+            showPopupMenu(it, data)
             true
         }
+    }
+
+    private fun showPopupMenu(view: View, track: Track) {
+        val popupMenu = PopupMenu(view.context, view)
+        popupMenu.menuInflater.inflate(
+            com.mediaapp.design_system.R.menu.track_options_menu, popupMenu.menu
+        )
+        popupMenu.setOnMenuItemClickListener { menuItem ->
+            when (menuItem.itemId) {
+                com.mediaapp.design_system.R.id.add_to_playlist -> {
+                    playlistHostLauncher.launchPlaylistHost(view.context, track)
+                    true
+                }
+
+                else -> false
+            }
+        }
+        popupMenu.show()
     }
 }

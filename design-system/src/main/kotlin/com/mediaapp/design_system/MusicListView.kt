@@ -47,8 +47,7 @@ class MusicListView @JvmOverloads constructor(
         val totalWidth = iconSize + textViewWidth
 
         setMeasuredDimension(
-            resolveSize(totalWidth, widthMeasureSpec),
-            resolveSize(iconSize, heightMeasureSpec)
+            resolveSize(totalWidth, widthMeasureSpec), resolveSize(iconSize, heightMeasureSpec)
         )
     }
 

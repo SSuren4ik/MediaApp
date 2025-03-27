@@ -3,6 +3,7 @@ package com.mediaapp.di
 import com.mediaapp.R
 import com.mediaapp.core.utils.AlbumLauncher
 import com.mediaapp.core.utils.MusicServiceLauncher
+import com.mediaapp.core.utils.PlaylistHostLauncher
 import com.mediaapp.core.utils.Router
 import com.mediaapp.utils.AppNavigationComponent
 import com.mediaapp.utils.MusicServiceLauncherImpl
@@ -39,5 +40,11 @@ class UtilsModule {
     @Singleton
     fun provideLauncherMusicService(): MusicServiceLauncher {
         return MusicServiceLauncherImpl()
+    }
+
+    @Provides
+    @Singleton
+    fun providesPlaylistHostLauncher(): PlaylistHostLauncher {
+        return AppNavigationComponent()
     }
 }

@@ -16,5 +16,10 @@
         android:label="Playlists"
         tools:layout="@layout/fragment_playlist" />
 
+    <fragment
+        android:id="@+id/search_music"
+        android:name="com.mediaapp.music_search.presentation.SearchFragment"
+        android:label="SearchMusic"
+        tools:layout="@layout/fragment_search" />
 
 </navigation>

@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="my_playlists_title">Мои плейлисты</string>
+    <string name="add_track_message">Трек добавлен в плейлист</string>
+    <string name="update_playlist_name_message">Название плейлиста обновлено</string>
+    <string name="user_not_authenticated_message">Пользователь не аутентифицирован</string>
+    <string name="playlist_already_exists_message">Плейлист с таким названием уже существует</string>
+    <string name="playlist_not_found_message">Плейлист не найден</string>
+    <string name="track_already_exists_message">Трек уже был добавлен в плейлист</string>
 </resources>

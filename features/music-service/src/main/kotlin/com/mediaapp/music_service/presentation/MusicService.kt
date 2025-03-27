@@ -59,26 +59,27 @@ class MusicService : Service() {
 
     private fun createNotification(isPlaying: Boolean = false): Notification {
         val playIntent = Intent(this, MusicService::class.java).apply { action = Actions.PLAY.name }
-        val playPendingIntent =
-            PendingIntent.getService(this, 0, playIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+        val playPendingIntent = PendingIntent.getService(
+            this, 0, playIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
 
         val pauseIntent =
             Intent(this, MusicService::class.java).apply { action = Actions.PAUSE.name }
-        val pausePendingIntent =
-            PendingIntent.getService(this, 0, pauseIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+        val pausePendingIntent = PendingIntent.getService(
+            this, 0, pauseIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
 
         val stopIntent = Intent(this, MusicService::class.java).apply { action = Actions.STOP.name }
-        val stopPendingIntent =
-            PendingIntent.getService(this, 0, stopIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+        val stopPendingIntent = PendingIntent.getService(
+            this, 0, stopIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
 
-        return NotificationCompat.Builder(this, "running_channel")
-            .setContentTitle("MyService")
+        return NotificationCompat.Builder(this, "running_channel").setContentTitle("MyService")
             .setContentText(if (isPlaying) "Playing Music" else "Music Paused")
             .setSmallIcon(R.drawable.img)
             .addAction(R.drawable.baseline_play_arrow_24, "Play", playPendingIntent)
             .addAction(R.drawable.baseline_pause_24, "Pause", pausePendingIntent)
-            .addAction(R.drawable.baseline_stop_circle_24, "Stop", stopPendingIntent)
-            .build()
+            .addAction(R.drawable.baseline_stop_circle_24, "Stop", stopPendingIntent).build()
     }
 
     private fun updateNotification(isPlaying: Boolean) {
@@ -88,6 +89,8 @@ class MusicService : Service() {
     }
 
     override fun onDestroy() {
+        val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.cancel(1)
         player.release()
         super.onDestroy()
     }

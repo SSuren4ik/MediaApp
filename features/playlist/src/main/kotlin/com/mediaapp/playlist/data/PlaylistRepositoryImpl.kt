@@ -1,6 +1,7 @@
 package com.mediaapp.playlist.data
 
 import com.mediaapp.core.models.PlaylistData
+import com.mediaapp.core.models.Track
 import com.mediaapp.playlist.domain.repository.PlaylistRepository
 
 class PlaylistRepositoryImpl(
@@ -19,7 +20,11 @@ class PlaylistRepositoryImpl(
         playlistStorage.updatePlaylistName(playlistNewName, playlistOldName)
     }
 
-    override suspend fun getPlaylistTracks(playlistId: String): PlaylistData {
-        return playlistStorage.getPlaylistTracks(playlistId)
+    override suspend fun getPlaylistTracks(playlistName: String): PlaylistData {
+        return playlistStorage.getPlaylistTracks(playlistName)
+    }
+
+    override suspend fun addTrackToPlaylist(playlistName: String, track: Track) {
+        playlistStorage.addTrackToPlaylist(playlistName, track)
     }
 }

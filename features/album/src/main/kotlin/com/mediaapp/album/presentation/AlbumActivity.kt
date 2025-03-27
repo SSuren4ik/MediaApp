@@ -22,6 +22,7 @@ import com.mediaapp.album.domain.NetworkResponse
 import com.mediaapp.album.presentation.viewmodel.AlbumViewModel
 import com.mediaapp.core.models.Track
 import com.mediaapp.core.utils.MusicServiceLauncher
+import com.mediaapp.core.utils.PlaylistHostLauncher
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -35,8 +36,11 @@ class AlbumActivity : AppCompatActivity() {
     @Inject
     lateinit var musicServiceLauncher: MusicServiceLauncher
 
+    @Inject
+    lateinit var playlistHostLauncher: PlaylistHostLauncher
+
     private val adapter: AlbumRecyclerViewAdapter by lazy {
-        AlbumRecyclerViewAdapter(musicServiceLauncher)
+        AlbumRecyclerViewAdapter(musicServiceLauncher, playlistHostLauncher)
     }
     private val diffCallback = AlbumDiffCallback()
 

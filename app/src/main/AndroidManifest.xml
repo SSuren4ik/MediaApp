@@ -34,7 +34,11 @@
             android:exported="false" />
 
         <activity
-            android:name=".playlist.presentation.playlist_screen.PlaylistActivity"
+            android:name=".playlist.presentation.playlist_screen.CurrentPlaylistActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".playlist.presentation.playlist_host.PlaylistHostActivity"
             android:exported="false" />
 
         <service

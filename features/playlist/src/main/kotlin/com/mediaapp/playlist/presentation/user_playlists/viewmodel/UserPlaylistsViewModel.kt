@@ -1,19 +1,25 @@
 package com.mediaapp.playlist.presentation.user_playlists.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.mediaapp.core.models.PlaylistData
+import com.mediaapp.core.models.FirebaseExceptions
+import com.mediaapp.core.models.Track
+import com.mediaapp.core.utils.ResourceProvider
+import com.mediaapp.playlist.R
+import com.mediaapp.playlist.domain.models.UserPlaylistsResponseStatusModel
+import com.mediaapp.playlist.domain.usecase.AddTrackPlaylistUseCase
 import com.mediaapp.playlist.domain.usecase.CreatePlaylistUseCase
 import com.mediaapp.playlist.domain.usecase.GetUserPlaylistsUseCase
-import com.mediaapp.playlist.domain.usecase.UpdatePlaylistNameUseCase
 import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class UserPlaylistsViewModel : ViewModel() {
+class UserPlaylistsViewModel(
+    private val provider: ResourceProvider,
+) : ViewModel() {
 
     @Inject
     lateinit var createPlaylistUseCase: CreatePlaylistUseCase
@@ -21,35 +27,51 @@ class UserPlaylistsViewModel : ViewModel() {
     @Inject
     lateinit var getUserPlaylistsUseCase: GetUserPlaylistsUseCase
 
-    private val _responseStatus = MutableSharedFlow<List<PlaylistData>>()
-    val responseStatus: SharedFlow<List<PlaylistData>> = _responseStatus
+    @Inject
+    lateinit var addTrackPlaylistUseCase: AddTrackPlaylistUseCase
 
-    private val _createStatus = MutableSharedFlow<Unit>()
-    val createStatus: SharedFlow<Unit> = _createStatus
+    private val _responseStatus = MutableSharedFlow<UserPlaylistsResponseStatusModel>()
+    val responseStatus: SharedFlow<UserPlaylistsResponseStatusModel> = _responseStatus
 
     private val exceptionHandler = CoroutineExceptionHandler { _, exception ->
         val message = when (exception) {
-            is IllegalStateException -> {
-                Log.d("PlaylistViewModel", "IllegalStateException ${exception.message}")
-            }
-
-            else -> {
-                Log.d("PlaylistViewModel", "Exception ${exception.message}")
-            }
+            is FirebaseExceptions.UserNotAuthenticatedException -> getString(R.string.user_not_authenticated_message)
+            is FirebaseExceptions.PlaylistAlreadyExistsException -> getString(R.string.playlist_already_exists_message)
+            is FirebaseExceptions.PlaylistNotFoundException -> getString(R.string.playlist_not_found_message)
+            is FirebaseExceptions.TrackAlreadyExistsException -> getString(R.string.track_already_exists_message)
+            else -> "Неизвестная ошибка: ${exception.message}"
         }
+        emitErrorMessage(message)
     }
 
     fun createPlaylist(playlistName: String) {
-        viewModelScope.launch(exceptionHandler) {
+        viewModelScope.launch(exceptionHandler + Dispatchers.IO) {
             createPlaylistUseCase.execute(playlistName)
-            _createStatus.emit(Unit)
+            _responseStatus.emit(UserPlaylistsResponseStatusModel.Success.SuccessCreatePlaylist)
         }
     }
 
     fun getUserPlaylists() {
-        viewModelScope.launch(exceptionHandler) {
+        viewModelScope.launch(exceptionHandler + Dispatchers.IO) {
             val result = getUserPlaylistsUseCase.execute()
             _responseStatus.emit(result)
         }
+    }
+
+    fun addSongToPlaylist(playlistName: String, track: Track) {
+        viewModelScope.launch(exceptionHandler + Dispatchers.IO) {
+            addTrackPlaylistUseCase.execute(playlistName, track)
+            _responseStatus.emit(UserPlaylistsResponseStatusModel.Success.SuccessAddSongToPlaylist)
+        }
+    }
+
+    private fun emitErrorMessage(message: String) {
+        viewModelScope.launch {
+            _responseStatus.emit(UserPlaylistsResponseStatusModel.Error(message))
+        }
+    }
+
+    private fun getString(resId: Int): String {
+        return provider.getString(resId)
     }
 }

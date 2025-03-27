@@ -45,4 +45,12 @@ interface MediaServiceApi {
         @Query("include") include: String = "musicinfo",
     ): MediaResponse
 
+    @GET("tracks")
+    suspend fun getTracksByPrefix(
+        @Query("client_id") apiKey: String,
+        @Query("search") prefix: String,
+        @Query("format") format: String = "json",
+        @Query("limit") limit: Int = 10,
+        @Query("include") include: String = "musicinfo",
+    ): MediaResponse
 }

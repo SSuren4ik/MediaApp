@@ -3,9 +3,9 @@ package com.mediaapp.album.di
 import com.mediaapp.album.data.AlbumMediaRepositoryImpl
 import com.mediaapp.album.domain.AlbumMediaRepository
 import com.mediaapp.album.domain.GetAlbumTracksUseCase
+import com.mediaapp.core.api.MediaServiceApi
 import com.mediaapp.core.di.MediaModule
 import com.mediaapp.core.di.NetworkModule
-import com.mediaapp.core.api.MediaServiceApi
 import dagger.Module
 import dagger.Provides
 import javax.inject.Named

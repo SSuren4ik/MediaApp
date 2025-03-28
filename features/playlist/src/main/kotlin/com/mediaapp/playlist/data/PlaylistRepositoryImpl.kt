@@ -16,15 +16,23 @@ class PlaylistRepositoryImpl(
         return playlistStorage.getUserPlaylists()
     }
 
-    override suspend fun updatePlaylistName(playlistNewName: String, playlistOldName: String) {
-        playlistStorage.updatePlaylistName(playlistNewName, playlistOldName)
+    override suspend fun updatePlaylistName(playlistId: String, playlistNewName: String) {
+        playlistStorage.updatePlaylistName(playlistId, playlistNewName)
     }
 
-    override suspend fun getPlaylistTracks(playlistName: String): PlaylistData {
-        return playlistStorage.getPlaylistTracks(playlistName)
+    override suspend fun getPlaylistTracks(playlistId: String): PlaylistData {
+        return playlistStorage.getPlaylistTracks(playlistId)
     }
 
-    override suspend fun addTrackToPlaylist(playlistName: String, track: Track) {
-        playlistStorage.addTrackToPlaylist(playlistName, track)
+    override suspend fun addTrackToPlaylist(playlistId: String, track: Track) {
+        playlistStorage.addTrackToPlaylist(playlistId, track)
+    }
+
+    override suspend fun getSelectedUserPlaylists(userId: String): List<PlaylistData> {
+        return playlistStorage.getSelectedUserPlaylists(userId)
+    }
+
+    override suspend fun saveSelectedUserPlaylist(playlistData: PlaylistData) {
+        playlistStorage.saveSelectedUserPlaylist(playlistData)
     }
 }

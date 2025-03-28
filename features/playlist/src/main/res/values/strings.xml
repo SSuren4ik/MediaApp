@@ -7,4 +7,8 @@
     <string name="playlist_already_exists_message">Плейлист с таким названием уже существует</string>
     <string name="playlist_not_found_message">Плейлист не найден</string>
     <string name="track_already_exists_message">Трек уже был добавлен в плейлист</string>
+    <string name="selected_user_id">id выбранного пользователя</string>
+    <string name="save_playlist_message">Плейлист сохранен</string>
+    <string name="save_playlist_option_menu_text">Сохранить плейлист</string>
+    <string name="playlist_saved_already_message">Данный плейлист уже был добавлен</string>
 </resources>

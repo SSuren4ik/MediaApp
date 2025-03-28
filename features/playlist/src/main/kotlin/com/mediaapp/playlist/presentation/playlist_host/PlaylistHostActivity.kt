@@ -7,7 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.mediaapp.core.models.Track
 import com.mediaapp.playlist.R
 import com.mediaapp.playlist.databinding.ActivityPlaylistHostBinding
-import com.mediaapp.playlist.presentation.user_playlists.UserPlaylistsFragment
+import com.mediaapp.playlist.presentation.current_user_playlists.UserPlaylistsFragment
 
 class PlaylistHostActivity : AppCompatActivity() {
 

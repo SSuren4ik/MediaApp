@@ -36,21 +36,16 @@ android {
 dependencies {
     implementation(projects.designSystem)
     implementation(projects.core)
-    implementation(projects.features.musicService)
 
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.fragment.ktx)
     implementation(libs.material)
 
     implementation(libs.dagger)
-    implementation(libs.firebase.auth)
-    implementation(libs.firebase.database)
     kapt(libs.dagger.compiler)
 
     implementation(libs.glide)
     kapt(libs.compiler)
-
-    implementation(libs.retrofit)
 
     implementation(libs.androidx.constraintlayout)
 }

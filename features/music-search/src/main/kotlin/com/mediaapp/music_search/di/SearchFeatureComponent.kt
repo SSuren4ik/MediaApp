@@ -8,7 +8,7 @@ import dagger.Component
 import javax.inject.Singleton
 
 @Singleton
-@Component(modules = [SearchModule::class], dependencies = [SearchDeps::class])
+@Component(modules = [SearchModule::class], dependencies = [MusicSearchDeps::class])
 interface SearchFeatureComponent {
 
     fun inject(searchViewModel: SearchViewModel)
@@ -16,12 +16,12 @@ interface SearchFeatureComponent {
 
     @Component.Builder
     interface Builder {
-        fun deps(deps: SearchDeps): Builder
+        fun deps(deps: MusicSearchDeps): Builder
         fun build(): SearchFeatureComponent
     }
 }
 
-interface SearchDeps {
+interface MusicSearchDeps {
     val musicServiceLauncher: MusicServiceLauncher
     val playlistHostLauncher: PlaylistHostLauncher
 }

@@ -18,13 +18,14 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.mediaapp.core.models.PlaylistData
 import com.mediaapp.core.utils.MusicServiceLauncher
+import com.mediaapp.core.utils.PlaylistHostLauncher
 import com.mediaapp.core.utils.ResourceProvider
 import com.mediaapp.playlist.R
 import com.mediaapp.playlist.databinding.ActivityPlaylistBinding
 import com.mediaapp.playlist.di.PlaylistDepsProvider
 import com.mediaapp.playlist.domain.models.CurrentPlaylistResponseStatusModel
+import com.mediaapp.playlist.presentation.playlist_screen.viewmodel.CurrentPlaylistViewModel
 import com.mediaapp.playlist.presentation.playlist_screen.viewmodel.CurrentPlaylistViewModelFactory
-import com.mediaapp.playlist.presentation.user_playlists.viewmodel.CurrentPlaylistViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -39,7 +40,14 @@ class CurrentPlaylistActivity : AppCompatActivity(), ResourceProvider {
     @Inject
     lateinit var musicServiceLauncher: MusicServiceLauncher
 
-    private val adapter by lazy { PlaylistRecyclerViewAdapter(musicServiceLauncher) }
+    @Inject
+    lateinit var playlistHostLauncher: PlaylistHostLauncher
+
+    private val adapter by lazy {
+        PlaylistRecyclerViewAdapter(musicServiceLauncher) { track ->
+            playlistHostLauncher.launchPlaylistHost(this, track)
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,11 +62,11 @@ class CurrentPlaylistActivity : AppCompatActivity(), ResourceProvider {
     }
 
     private fun fetchPlaylistTracks() {
-        val playlistName = getPlaylistName()
-        if (playlistName.isNotEmpty()) {
-            viewModel.getPlaylistTracks(playlistName)
+        val playlistId = getPlaylistId()
+        if (playlistId.isNotEmpty()) {
+            viewModel.getPlaylistTracks(playlistId)
         } else {
-            Toast.makeText(this, "Playlist name is empty", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Playlist ID is empty", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -78,6 +86,8 @@ class CurrentPlaylistActivity : AppCompatActivity(), ResourceProvider {
                     CurrentPlaylistResponseStatusModel.Success.SuccessUpdatePlaylistName -> {
                         showToast(getString(R.string.update_playlist_name_message))
                     }
+
+                    else -> showToast("Неизвестная ошибка")
                 }
             }
         }
@@ -89,8 +99,10 @@ class CurrentPlaylistActivity : AppCompatActivity(), ResourceProvider {
         }
     }
 
-    private fun getPlaylistName(): String {
-        return intent.getStringExtra("playlistName") ?: ""
+    private fun getPlaylistId(): String {
+        val id = intent.getStringExtra("playlistId") ?: ""
+        viewModel.playlistId = id
+        return id
     }
 
     private fun setupUI() {
@@ -101,12 +113,7 @@ class CurrentPlaylistActivity : AppCompatActivity(), ResourceProvider {
             isSingleLine = true
             setOnFocusChangeListener { _, hasFocus ->
                 if (!hasFocus) {
-                    if (viewModel.getPlaylistName().isNotEmpty()) onEditTextFocusChanged(
-                        binding.playlistName.text.toString(), viewModel.getPlaylistName()
-                    )
-                    else onEditTextFocusChanged(
-                        binding.playlistName.text.toString(), getPlaylistName()
-                    )
+                    onEditTextFocusChanged(binding.playlistName.text.toString())
                 }
             }
             setOnKeyListener { _, keyCode, event ->
@@ -158,10 +165,8 @@ class CurrentPlaylistActivity : AppCompatActivity(), ResourceProvider {
         }
     }
 
-    private fun onEditTextFocusChanged(playlistNewName: String, playlistOldName: String) {
-        lifecycleScope.launch {
-            viewModel.updatePlaylistName(playlistNewName, playlistOldName)
-        }
+    private fun onEditTextFocusChanged(playlistNewName: String) {
+        viewModel.updatePlaylistName(playlistNewName)
     }
 
     private fun hideKeyboard() {

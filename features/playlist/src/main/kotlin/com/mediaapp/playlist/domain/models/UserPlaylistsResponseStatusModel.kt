@@ -7,6 +7,7 @@ sealed class UserPlaylistsResponseStatusModel {
         data object SuccessCreatePlaylist : Success()
         data class SuccessGetUserPlaylists(val data: List<PlaylistData>) : Success()
         data object SuccessAddSongToPlaylist : Success()
+        data object SuccessSaveSelectedPlaylist : Success()
     }
 
     data class Error(val message: String) : UserPlaylistsResponseStatusModel()

@@ -47,6 +47,7 @@ dependencies {
     implementation(projects.features.musicService)
     implementation(projects.features.playlist)
     implementation(projects.features.musicSearch)
+    implementation(projects.features.userSearch)
 
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.constraintlayout)

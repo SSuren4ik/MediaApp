@@ -4,7 +4,10 @@ import com.mediaapp.R
 import com.mediaapp.core.utils.AlbumLauncher
 import com.mediaapp.core.utils.MusicServiceLauncher
 import com.mediaapp.core.utils.PlaylistHostLauncher
+import com.mediaapp.core.utils.PlaylistLauncher
 import com.mediaapp.core.utils.Router
+import com.mediaapp.core.utils.SelectedUserPlaylistsLauncher
+import com.mediaapp.core.utils.UserSearchLauncher
 import com.mediaapp.utils.AppNavigationComponent
 import com.mediaapp.utils.MusicServiceLauncherImpl
 import dagger.Module
@@ -45,6 +48,24 @@ class UtilsModule {
     @Provides
     @Singleton
     fun providesPlaylistHostLauncher(): PlaylistHostLauncher {
+        return AppNavigationComponent()
+    }
+
+    @Provides
+    @Singleton
+    fun provideUserSearchLauncher(): UserSearchLauncher {
+        return AppNavigationComponent()
+    }
+
+    @Provides
+    @Singleton
+    fun provideSelectedUserPlaylistsLauncher(): SelectedUserPlaylistsLauncher {
+        return AppNavigationComponent()
+    }
+
+    @Provides
+    @Singleton
+    fun providesPlaylistLauncher(): PlaylistLauncher {
         return AppNavigationComponent()
     }
 }

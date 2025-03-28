@@ -3,7 +3,6 @@ package com.mediaapp.playlist.presentation.playlist_screen.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.mediaapp.core.utils.ResourceProvider
-import com.mediaapp.playlist.presentation.user_playlists.viewmodel.CurrentPlaylistViewModel
 
 class CurrentPlaylistViewModelFactory(
     private val resourceProvider: ResourceProvider,

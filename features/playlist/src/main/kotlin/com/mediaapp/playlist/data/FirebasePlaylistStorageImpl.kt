@@ -13,74 +13,109 @@ class FirebasePlaylistStorageImpl(
 ) : PlaylistStorage {
 
     override suspend fun createPlaylist(playlistName: String) {
-        checkPlaylistExists(playlistName)
         val userId = firebaseAuth.currentUser!!.uid
+        checkPlaylistExistsForUser(
+            playlistName, userId
+        ) // Проверяем, существует ли уже плейлист с таким названием у этого пользователя
+
         val userName = getUserName(userId)
+
+        val playlistRef = firebaseDatabase.child("Playlists").push()
+        val playlistId = playlistRef.key!!
+
         val playlistData = PlaylistData(
-            playlistName = playlistName, authorId = userId, authorName = userName
+            playlistId = playlistId,
+            playlistName = playlistName,
+            authorId = userId,
+            authorName = userName,
+            owners = listOf(userId) // Добавляем пользователя как владельца
         )
-        firebaseDatabase.child("Users").child(userId).child("Playlists").push()
-            .setValue(playlistData).await()
+
+        playlistRef.setValue(playlistData).await()
+
+        firebaseDatabase.child("Users").child(userId).child("playlists").push().setValue(playlistId)
+            .await()
     }
 
     override suspend fun getUserPlaylists(): List<PlaylistData> {
         val currentUser = firebaseAuth.currentUser!!
         val userPlaylistsRef =
-            firebaseDatabase.child("Users").child(currentUser.uid).child("Playlists")
+            firebaseDatabase.child("Users").child(currentUser.uid).child("playlists")
         val snapshot = userPlaylistsRef.get().await()
+
         val playlists = mutableListOf<PlaylistData>()
-        snapshot.children.forEach { playlistSnapshot ->
-            val playlist = playlistSnapshot.getValue(PlaylistData::class.java)
-            playlist?.let { playlists.add(it) }
+        for (playlistSnapshot in snapshot.children) {
+            val playlistId = playlistSnapshot.getValue(String::class.java) ?: continue
+            val playlistRef = firebaseDatabase.child("Playlists").child(playlistId)
+            val playlistSnapshot = playlistRef.get().await()
+            playlistSnapshot.getValue(PlaylistData::class.java)?.let { playlists.add(it) }
         }
         return playlists
     }
 
-    override suspend fun updatePlaylistName(playlistNewName: String, playlistOldName: String) {
-        checkPlaylistExists(playlistNewName)
+    override suspend fun updatePlaylistName(playlistId: String, playlistNewName: String) {
+        val playlistRef = firebaseDatabase.child("Playlists").child(playlistId)
 
-        val currentUser = firebaseAuth.currentUser!!
-
-        val userPlaylistsRef =
-            firebaseDatabase.child("Users").child(currentUser.uid).child("Playlists")
-
-        val snapshot = userPlaylistsRef.get().await()
-        snapshot.children.forEach { playlistSnapshot ->
-            val playlist = playlistSnapshot.getValue(PlaylistData::class.java)
-            if (playlist?.playlistName == playlistOldName) {
-                playlistSnapshot.ref.child("playlistName").setValue(playlistNewName).await()
-            }
+        val snapshot = playlistRef.get().await()
+        if (!snapshot.exists()) {
+            throw FirebaseExceptions.PlaylistNotFoundException("Плейлист не найден")
         }
+
+        playlistRef.child("playlistName").setValue(playlistNewName).await()
     }
 
-    override suspend fun getPlaylistTracks(playlistName: String): PlaylistData {
-        val currentUser = firebaseAuth.currentUser!!
-        val userPlaylistsRef =
-            firebaseDatabase.child("Users").child(currentUser.uid).child("Playlists")
-        val snapshot =
-            userPlaylistsRef.orderByChild("playlistName").equalTo(playlistName).get().await()
-        val playlist = snapshot.children.first().getValue(PlaylistData::class.java)
+    override suspend fun getPlaylistTracks(playlistId: String): PlaylistData {
+        val playlistRef = firebaseDatabase.child("Playlists").child(playlistId)
+        val snapshot = playlistRef.get().await()
+        return snapshot.getValue(PlaylistData::class.java)
             ?: throw FirebaseExceptions.PlaylistNotFoundException("Плейлист не найден")
-        return playlist
     }
 
-    override suspend fun addTrackToPlaylist(playlistName: String, track: Track) {
-        val currentUser = firebaseAuth.currentUser!!
-        val userPlaylistsRef =
-            firebaseDatabase.child("Users").child(currentUser.uid).child("Playlists")
+    override suspend fun addTrackToPlaylist(playlistId: String, track: Track) {
+        val playlistRef = firebaseDatabase.child("Playlists").child(playlistId)
+        val snapshot = playlistRef.get().await()
+        val playlist = snapshot.getValue(PlaylistData::class.java)
+            ?: throw FirebaseExceptions.PlaylistNotFoundException("Плейлист не найден")
 
-        val snapshot =
-            userPlaylistsRef.orderByChild("playlistName").equalTo(playlistName).get().await()
-        val playlist = snapshot.children.firstOrNull()?.getValue(PlaylistData::class.java)
-
-        val tracks = playlist!!.tracks.toMutableList()
-
+        val tracks = playlist.tracks.toMutableList()
         if (tracks.any { it.id == track.id }) {
             throw FirebaseExceptions.TrackAlreadyExistsException("Трек уже добавлен в плейлист")
         }
         tracks.add(track)
-        userPlaylistsRef.child(snapshot.children.first().key!!).child("tracks").setValue(tracks)
-            .await()
+        playlistRef.child("tracks").setValue(tracks).await()
+    }
+
+    override suspend fun getSelectedUserPlaylists(userId: String): List<PlaylistData> {
+        val userPlaylistsRef = firebaseDatabase.child("Users").child(userId).child("playlists")
+        val snapshot = userPlaylistsRef.get().await()
+
+        val playlists = mutableListOf<PlaylistData>()
+        for (playlistSnapshot in snapshot.children) {
+            val playlistId = playlistSnapshot.getValue(String::class.java) ?: continue
+            val playlistRef = firebaseDatabase.child("Playlists").child(playlistId)
+            val playlistSnapshot = playlistRef.get().await()
+            playlistSnapshot.getValue(PlaylistData::class.java)?.let { playlists.add(it) }
+        }
+        return playlists
+    }
+
+    override suspend fun saveSelectedUserPlaylist(playlistData: PlaylistData) {
+        val currentUserId = firebaseAuth.currentUser!!.uid
+        val playlistRef = firebaseDatabase.child("Playlists").child(playlistData.playlistId)
+        val snapshot = playlistRef.get().await()
+
+        val playlist = snapshot.getValue(PlaylistData::class.java)
+            ?: throw FirebaseExceptions.PlaylistNotFoundException("Плейлист не найден")
+
+        if (playlist.owners.contains(currentUserId)) {
+            throw FirebaseExceptions.PlaylistSavedAlreadyException("Вы уже добавили этот плейлист в свою коллекцию")
+        }
+        val updatedPlaylistData = playlist.copy(
+            owners = playlist.owners + currentUserId
+        )
+        playlistRef.setValue(updatedPlaylistData).await()
+        firebaseDatabase.child("Users").child(currentUserId).child("playlists").push()
+            .setValue(playlistData.playlistId).await()
     }
 
     private suspend fun getUserName(userId: String): String {
@@ -89,15 +124,18 @@ class FirebasePlaylistStorageImpl(
         return snapshot.value as? String ?: ""
     }
 
-    private suspend fun checkPlaylistExists(playlistName: String) {
-        val currentUser = firebaseAuth.currentUser
-        val userPlaylistsRef =
-            firebaseDatabase.child("Users").child(currentUser?.uid!!).child("Playlists")
-        val snapshot =
-            userPlaylistsRef.orderByChild("playlistName").equalTo(playlistName).get().await()
-        if (snapshot.exists()) {
-            throw FirebaseExceptions.PlaylistAlreadyExistsException("Плейлист с таким названием уже существует")
+    private suspend fun checkPlaylistExistsForUser(playlistName: String, userId: String) {
+        val playlistsRef = firebaseDatabase.child("Users").child(userId).child("playlists")
+        val snapshot = playlistsRef.get().await()
+
+        for (playlistSnapshot in snapshot.children) {
+            val playlistId = playlistSnapshot.getValue(String::class.java) ?: continue
+            val playlistRef = firebaseDatabase.child("Playlists").child(playlistId)
+            val playlistDataSnapshot = playlistRef.get().await()
+            val playlist = playlistDataSnapshot.getValue(PlaylistData::class.java)
+            if (playlist?.playlistName == playlistName) {
+                throw FirebaseExceptions.PlaylistAlreadyExistsException("У вас уже есть плейлист с таким названием")
+            }
         }
     }
 }
-

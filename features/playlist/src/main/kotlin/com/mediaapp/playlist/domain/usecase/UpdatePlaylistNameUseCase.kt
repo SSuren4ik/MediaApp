@@ -6,10 +6,10 @@ import com.mediaapp.playlist.domain.repository.PlaylistRepository
 class UpdatePlaylistNameUseCase(private val playlistRepository: PlaylistRepository) {
 
     suspend fun execute(
+        playlistId: String,
         playlistNewName: String,
-        playlistOldName: String,
     ): CurrentPlaylistResponseStatusModel {
-        playlistRepository.updatePlaylistName(playlistNewName, playlistOldName)
+        playlistRepository.updatePlaylistName(playlistId, playlistNewName)
         return CurrentPlaylistResponseStatusModel.Success.SuccessUpdatePlaylistName
     }
 }

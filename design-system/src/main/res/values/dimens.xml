@@ -9,6 +9,7 @@
     <dimen name="music_name_in_album_size">6sp</dimen>
     <dimen name="number_in_music_size">40sp</dimen>
     <dimen name="playlist_top_margin">5sp</dimen>
+    <dimen name="track_name_image_margin">8sp</dimen>
     <dimen name="album_list_icon_size">120sp</dimen>
     <dimen name="playlist_icon_size">80sp</dimen>
     <dimen name="playlist_text_left_margin">5sp</dimen>
@@ -20,5 +21,5 @@
     <dimen name="title_start_dimen">10sp</dimen>
     <dimen name="item_spacing">10sp</dimen>
     <dimen name="music_name_border_width">1sp</dimen>
-    <dimen name="music_list_margin_in_album">40dp</dimen>
+    <dimen name="music_list_margin_in_album">40sp</dimen>
 </resources>

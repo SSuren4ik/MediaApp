@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.mediaapp.core.utils.MusicServiceLauncher
 import com.mediaapp.core.utils.PlaylistHostLauncher
+import com.mediaapp.core.utils.SearchDelayedTextWatcher
 import com.mediaapp.music_search.databinding.FragmentSearchBinding
 import com.mediaapp.music_search.di.SearchDepsProvider
 import com.mediaapp.music_search.presentation.viewmodel.SearchViewModel
@@ -64,13 +65,18 @@ class SearchFragment : Fragment() {
         binding.recyclerView.apply {
             layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
             adapter = this@SearchFragment.adapter
+            addItemDecoration(
+                SearchItemDecoration(
+                    resources.getDimensionPixelSize(com.mediaapp.design_system.R.dimen.item_spacing)
+                )
+            )
         }
     }
 
     private fun initUI() {
         binding.searchEditText.apply {
             isSingleLine = true
-            addTextChangedListener(DelayedTextWatcher { prefix ->
+            addTextChangedListener(SearchDelayedTextWatcher(coroutineScope = lifecycleScope) { prefix ->
                 viewModel.getMusicByPrefix(prefix)
             })
         }

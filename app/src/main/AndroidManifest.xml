@@ -41,6 +41,14 @@
             android:name=".playlist.presentation.playlist_host.PlaylistHostActivity"
             android:exported="false" />
 
+        <activity
+            android:name=".user_search.presentation.search_screen.UserSearchActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".playlist.presentation.selected_user_playlists.SelectedUserPlaylistsActivity"
+            android:exported="false" />
+
         <service
             android:name=".music_service.presentation.MusicService"
             android:foregroundServiceType="mediaPlayback" />

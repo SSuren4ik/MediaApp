@@ -9,9 +9,13 @@ interface PlaylistStorage {
 
     suspend fun getUserPlaylists(): List<PlaylistData>
 
-    suspend fun updatePlaylistName(playlistNewName: String, playlistOldName: String)
+    suspend fun updatePlaylistName(playlistId: String, playlistNewName: String)
 
-    suspend fun getPlaylistTracks(playlistName: String): PlaylistData
+    suspend fun getPlaylistTracks(playlistId: String): PlaylistData
 
-    suspend fun addTrackToPlaylist(playlistName: String, track: Track)
+    suspend fun addTrackToPlaylist(playlistId: String, track: Track)
+
+    suspend fun getSelectedUserPlaylists(userId: String): List<PlaylistData>
+
+    suspend fun saveSelectedUserPlaylist(playlistData: PlaylistData)
 }

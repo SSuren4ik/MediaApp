@@ -6,8 +6,8 @@ import com.mediaapp.playlist.domain.repository.PlaylistRepository
 
 class AddTrackPlaylistUseCase(private val playlistRepository: PlaylistRepository) {
 
-    suspend fun execute(playlistName: String, track: Track): UserPlaylistsResponseStatusModel {
-        playlistRepository.addTrackToPlaylist(playlistName, track)
+    suspend fun execute(playlistId: String, track: Track): UserPlaylistsResponseStatusModel {
+        playlistRepository.addTrackToPlaylist(playlistId, track)
         return UserPlaylistsResponseStatusModel.Success.SuccessAddSongToPlaylist
     }
 }

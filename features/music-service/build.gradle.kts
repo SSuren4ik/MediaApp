@@ -39,6 +39,7 @@ dependencies {
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.fragment.ktx)
     implementation(libs.material)
+    implementation (libs.androidx.media)
 
     implementation(libs.dagger)
     kapt(libs.dagger.compiler)

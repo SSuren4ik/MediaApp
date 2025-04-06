@@ -25,6 +25,8 @@ class HomeMediaRepositoryImpl(
             throw e
         } catch (e: Exception) {
             throw UnknownException(e.message.toString(), e)
+        } catch (e: IOException) {
+            throw NetworkException(e.message.toString(), e)
         }
     }
 

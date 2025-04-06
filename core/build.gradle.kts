@@ -47,7 +47,7 @@ dependencies {
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.auth)
     implementation(libs.firebase.database)
-
+    implementation ("com.squareup.okhttp3:logging-interceptor:4.11.0")
     implementation(libs.dagger)
     kapt(libs.dagger.compiler)
 

@@ -7,6 +7,8 @@ import com.mediaapp.core.BuildConfig
 import com.mediaapp.core.api.MediaServiceApi
 import dagger.Module
 import dagger.Provides
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Named
@@ -27,8 +29,11 @@ class NetworkModule {
     @Singleton
     fun provideMediaService(@Named("baseUrl") baseUrl: String): MediaServiceApi {
         return Retrofit.Builder().baseUrl(baseUrl)
-            .addConverterFactory(GsonConverterFactory.create()).build()
-            .create(MediaServiceApi::class.java)
+            .addConverterFactory(GsonConverterFactory.create()).client(
+                OkHttpClient.Builder().addInterceptor(HttpLoggingInterceptor().apply {
+                        level = HttpLoggingInterceptor.Level.BODY
+                    }).build()
+            ).build().create(MediaServiceApi::class.java)
     }
 
     @Provides

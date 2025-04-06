@@ -11,6 +11,7 @@ import com.mediaapp.core.utils.SelectedUserPlaylistsLauncher
 import com.mediaapp.core.utils.UserSearchLauncher
 import com.mediaapp.home.di.HomeDeps
 import com.mediaapp.music_search.di.MusicSearchDeps
+import com.mediaapp.music_service.presentation.MusicService
 import com.mediaapp.playlist.di.PlaylistDeps
 import com.mediaapp.registration.di.RegistrationDeps
 import com.mediaapp.user_search.di.UserSearchDeps
@@ -31,6 +32,7 @@ interface AppComponent : RegistrationDeps, HomeDeps, AlbumDeps, PlaylistDeps, Mu
     override val selectedUserPlaylistsLauncher: SelectedUserPlaylistsLauncher
     override val playlistHostLauncher: PlaylistHostLauncher
     override val playlistLauncher: PlaylistLauncher
+    override val musicService: MusicService
 
     @Component.Factory
     interface Factory {

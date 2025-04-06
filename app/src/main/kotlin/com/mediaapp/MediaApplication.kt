@@ -41,6 +41,12 @@ class MediaApplication : Application(), RegistrationDepsProvider, ResourceProvid
         notificationManager.createNotificationChannel(channel)
     }
 
+    override fun onTerminate() {
+        super.onTerminate()
+        val notificationManager = getSystemService(NotificationManager::class.java)
+        notificationManager.deleteNotificationChannel("running_channel")
+    }
+
     override fun getRegistrationComponent(): RegistrationComponent {
         return DaggerRegistrationComponent.builder().deps(appComponent).build()
     }

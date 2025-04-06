@@ -35,6 +35,7 @@ android {
 dependencies {
     implementation(projects.designSystem)
     implementation(projects.core)
+    implementation(projects.features.musicService)
 
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.fragment.ktx)

@@ -1,7 +1,12 @@
 package com.mediaapp.album.presentation
 
+import android.content.ComponentName
+import android.content.Context
+import android.content.Intent
+import android.content.ServiceConnection
 import android.os.Build
 import android.os.Bundle
+import android.os.IBinder
 import android.view.View
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -15,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView.VERTICAL
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
+import com.mediaapp.album.R
 import com.mediaapp.album.databinding.ActivityAlbumBinding
 import com.mediaapp.album.di.AlbumDepsProvider
 import com.mediaapp.album.domain.AlbumData
@@ -23,6 +29,8 @@ import com.mediaapp.album.presentation.viewmodel.AlbumViewModel
 import com.mediaapp.core.models.Track
 import com.mediaapp.core.utils.MusicServiceLauncher
 import com.mediaapp.core.utils.PlaylistHostLauncher
+import com.mediaapp.music_service.presentation.MusicControlFragment
+import com.mediaapp.music_service.presentation.MusicService
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -44,6 +52,19 @@ class AlbumActivity : AppCompatActivity() {
     }
     private val diffCallback = AlbumDiffCallback()
 
+    private val serviceConnection = object : ServiceConnection {
+        override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
+            isMusicServiceRunning = true
+            unbindService(this)
+        }
+
+        override fun onServiceDisconnected(name: ComponentName?) {
+            isMusicServiceRunning = false
+        }
+    }
+
+    private var isMusicServiceRunning = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityAlbumBinding.inflate(layoutInflater)
@@ -55,6 +76,11 @@ class AlbumActivity : AppCompatActivity() {
         binding.albumDateTextView.visibility = View.GONE
         observeAlbumTracks()
         getAlbumTracks()
+
+        checkMusicServiceRunning()
+        if (isMusicServiceRunning) {
+            setupMusicControlFragment()
+        }
     }
 
     private fun getAlbumTracks() {
@@ -64,6 +90,11 @@ class AlbumActivity : AppCompatActivity() {
             showAlbumData(track)
             viewModel.getTracks(albumData)
         }
+    }
+
+    private fun checkMusicServiceRunning() {
+        val intent = Intent(this, MusicService::class.java)
+        isMusicServiceRunning = bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE)
     }
 
     private fun observeAlbumTracks() {
@@ -132,10 +163,24 @@ class AlbumActivity : AppCompatActivity() {
     }
 
     private fun setInsets() {
-        ViewCompat.setOnApplyWindowInsetsListener(binding.mainContent) { view, insets ->
+        ViewCompat.setOnApplyWindowInsetsListener(binding.musicControlContainer) { view, insets ->
             val innerPadding = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            view.setPadding(0, innerPadding.top, 0, innerPadding.bottom)
+            view.setPadding(0, 0, 0, innerPadding.bottom)
             insets
+        }
+
+        ViewCompat.setOnApplyWindowInsetsListener(binding.albumImage) { view, insets ->
+            val innerPadding = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            view.setPadding(0, innerPadding.top, 0, 0)
+            insets
+        }
+    }
+
+    private fun setupMusicControlFragment() {
+        if (isMusicServiceRunning) {
+            val musicControlFragment = MusicControlFragment.newInstance()
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.music_control_container, musicControlFragment).commit()
         }
     }
 }

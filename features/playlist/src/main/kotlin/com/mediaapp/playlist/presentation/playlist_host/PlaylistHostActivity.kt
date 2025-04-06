@@ -4,6 +4,8 @@ import android.os.Build
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import com.mediaapp.core.models.Track
 import com.mediaapp.playlist.R
 import com.mediaapp.playlist.databinding.ActivityPlaylistHostBinding
@@ -17,6 +19,7 @@ class PlaylistHostActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         binding = ActivityPlaylistHostBinding.inflate(layoutInflater)
+        setInsets()
         setContentView(binding.root)
         val track = getTrack()
 
@@ -32,6 +35,14 @@ class PlaylistHostActivity : AppCompatActivity() {
             intent.getParcelableExtra("track", Track::class.java)
         } else {
             intent.getParcelableExtra("track")
+        }
+    }
+
+    private fun setInsets() {
+        ViewCompat.setOnApplyWindowInsetsListener(binding.fragmentContainer) { view, insets ->
+            val innerPadding = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            view.setPadding(0, 0, 0, innerPadding.bottom)
+            insets
         }
     }
 }

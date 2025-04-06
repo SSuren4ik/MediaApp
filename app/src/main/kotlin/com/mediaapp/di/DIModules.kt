@@ -8,6 +8,7 @@ import com.mediaapp.core.utils.PlaylistLauncher
 import com.mediaapp.core.utils.Router
 import com.mediaapp.core.utils.SelectedUserPlaylistsLauncher
 import com.mediaapp.core.utils.UserSearchLauncher
+import com.mediaapp.music_service.presentation.MusicService
 import com.mediaapp.utils.AppNavigationComponent
 import com.mediaapp.utils.MusicServiceLauncherImpl
 import dagger.Module
@@ -67,5 +68,11 @@ class UtilsModule {
     @Singleton
     fun providesPlaylistLauncher(): PlaylistLauncher {
         return AppNavigationComponent()
+    }
+
+    @Provides
+    @Singleton
+    fun provideMusicService(): MusicService {
+        return MusicService()
     }
 }

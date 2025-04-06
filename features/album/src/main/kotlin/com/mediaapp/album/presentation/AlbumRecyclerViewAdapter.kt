@@ -40,9 +40,11 @@ class AlbumRecyclerViewAdapter(
         val data = dataList[position]
         holder.binding.musicView.setMusicName(data.name)
         holder.binding.musicView.setMusicNumber((position + 1).toString())
+
         holder.binding.musicView.setOnClickListener {
-            musicServiceLauncher.startMusicService(holder.itemView.context, data.audio)
+            musicServiceLauncher.startMusicService(holder.itemView.context, data)
         }
+
         holder.binding.musicView.setOnLongClickListener {
             showPopupMenu(it, data)
             true

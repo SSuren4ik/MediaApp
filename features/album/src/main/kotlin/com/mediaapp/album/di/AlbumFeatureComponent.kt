@@ -4,6 +4,7 @@ import com.mediaapp.album.presentation.AlbumActivity
 import com.mediaapp.album.presentation.viewmodel.AlbumViewModel
 import com.mediaapp.core.utils.MusicServiceLauncher
 import com.mediaapp.core.utils.PlaylistHostLauncher
+import com.mediaapp.music_service.presentation.MusicService
 import dagger.Component
 import javax.inject.Singleton
 
@@ -24,6 +25,7 @@ interface AlbumFeatureComponent {
 interface AlbumDeps {
     val musicServiceLauncher: MusicServiceLauncher
     val launcher: PlaylistHostLauncher
+    val musicService: MusicService
 }
 
 interface AlbumDepsProvider {

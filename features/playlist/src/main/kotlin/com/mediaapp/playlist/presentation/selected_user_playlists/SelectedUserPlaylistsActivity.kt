@@ -39,8 +39,7 @@ class SelectedUserPlaylistsActivity : AppCompatActivity(), ResourceProvider {
         SelectedUserPlaylistsAdapter(
             onItemClick = { playlistData ->
                 viewModel.saveSelectedPlaylist(playlistData)
-            },
-            playlistLauncher = playlistLauncher
+            }, playlistLauncher = playlistLauncher
         )
     }
 
@@ -87,11 +86,11 @@ class SelectedUserPlaylistsActivity : AppCompatActivity(), ResourceProvider {
                         showToast(result.message)
                     }
 
-                    UserPlaylistsResponseStatusModel.Success.SuccessAddSongToPlaylist -> {
+                    is UserPlaylistsResponseStatusModel.Success.SuccessAddSongToPlaylist -> {
                         showToast(getString(R.string.add_track_message))
                     }
 
-                    UserPlaylistsResponseStatusModel.Success.SuccessSaveSelectedPlaylist -> {
+                    is UserPlaylistsResponseStatusModel.Success.SuccessSaveSelectedPlaylist -> {
                         showToast(getString(R.string.save_playlist_message))
                         finish()
                     }

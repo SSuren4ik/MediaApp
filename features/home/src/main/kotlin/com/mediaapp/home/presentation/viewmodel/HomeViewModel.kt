@@ -1,5 +1,6 @@
 package com.mediaapp.home.presentation.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mediaapp.core.models.NetworkException
@@ -54,8 +55,15 @@ class HomeViewModel(
 
     private val exceptionHandler = CoroutineExceptionHandler { _, exception ->
         val errorText = when (exception) {
-            is NetworkException -> resourceProvider.getString(R.string.network_error_text)
-            is HttpException -> resourceProvider.getString(R.string.http_error_text)
+            is NetworkException -> {
+                Log.d("HomeViewModel", "NetworkException: ${exception.message}")
+                resourceProvider.getString(R.string.network_error_text)
+            }
+
+            is HttpException -> {
+                Log.d("HomeViewModel", "HttpException: ${exception.message}")
+                resourceProvider.getString(R.string.http_error_text)
+            }
             else -> resourceProvider.getString(R.string.unknown_error_text)
         }
         viewModelScope.launch {
@@ -74,8 +82,7 @@ class HomeViewModel(
                 return@launch
             }
 
-            val deferredResults =
-                listOf(async { getPopularMusicUseCase.execute(popularMusicOffset, limit) },
+            val deferredResults = listOf(async { getPopularMusicUseCase.execute(popularMusicOffset, limit) },
                     async { getNewMusicUseCase.execute(newMusicOffset, limit) },
                     async { getTopDownloadsMusicUseCase.execute(topDownloadsMusicOffset, limit) })
 

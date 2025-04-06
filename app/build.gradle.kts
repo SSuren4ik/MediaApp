@@ -21,8 +21,7 @@ android {
         release {
             isMinifyEnabled = false
             proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
             )
         }
     }
@@ -50,9 +49,13 @@ dependencies {
     implementation(projects.features.userSearch)
 
     implementation(libs.androidx.appcompat)
-    implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.navigation.fragment.ktx)
+    implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.navigation.ui.ktx)
+
     implementation(libs.dagger)
     kapt(libs.dagger.compiler)
+
+    implementation(libs.glide)
+    implementation(libs.androidx.transition)
 }

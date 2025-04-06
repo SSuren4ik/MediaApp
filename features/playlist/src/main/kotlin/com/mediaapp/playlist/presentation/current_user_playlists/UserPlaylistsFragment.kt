@@ -144,12 +144,12 @@ class UserPlaylistsFragment : Fragment(), ResourceProvider {
             else it.getParcelable("track")
         }
 
-        binding.addPlaylistButton.isVisible = !mode
+        binding.findUserButton.isVisible = !mode
     }
 
     private fun initRecyclerView() {
         binding.recyclerView.apply {
-            layoutManager = LinearLayoutManager(requireContext())
+            this.layoutManager = LinearLayoutManager(this@UserPlaylistsFragment.requireContext())
             adapter = this@UserPlaylistsFragment.adapter
             addItemDecoration(
                 ItemSpacingDecorator(
@@ -157,6 +157,11 @@ class UserPlaylistsFragment : Fragment(), ResourceProvider {
                 )
             )
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.getUserPlaylists()
     }
 
     private fun showToast(message: String) {

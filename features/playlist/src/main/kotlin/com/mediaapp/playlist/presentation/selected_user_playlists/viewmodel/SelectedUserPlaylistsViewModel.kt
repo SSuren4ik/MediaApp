@@ -10,6 +10,7 @@ import com.mediaapp.playlist.domain.models.UserPlaylistsResponseStatusModel
 import com.mediaapp.playlist.domain.usecase.GetSelectedUserPlaylistsUseCase
 import com.mediaapp.playlist.domain.usecase.SaveSelectedPlaylistUseCase
 import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -41,15 +42,18 @@ class SelectedUserPlaylistsViewModel(
         emitErrorMessage(message)
     }
 
+    private fun launch(block: suspend CoroutineScope.() -> Unit) =
+        viewModelScope.launch(exceptionHandler + Dispatchers.IO, block = block)
+
     fun getUserPlaylists(userId: String) {
-        viewModelScope.launch(exceptionHandler + Dispatchers.IO) {
+        launch {
             val result = getSelectedUserPlaylistsUseCase.execute(userId)
             _responseStatus.emit(result)
         }
     }
 
     fun saveSelectedPlaylist(playlistData: PlaylistData) {
-        viewModelScope.launch(exceptionHandler + Dispatchers.IO) {
+        launch {
             saveSelectedPlaylistUseCase.execute(playlistData)
             _responseStatus.emit(UserPlaylistsResponseStatusModel.Success.SuccessSaveSelectedPlaylist)
         }

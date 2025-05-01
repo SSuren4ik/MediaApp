@@ -12,7 +12,6 @@ import com.mediaapp.design_system.databinding.MusicInAlbumItemBinding
 
 class PlaylistRecyclerViewAdapter(
     private val musicServiceLauncher: MusicServiceLauncher,
-    private val addToPlaylist: (Track) -> Unit,
     private val removeFromPlaylist: (Track) -> Unit,
 ) : RecyclerView.Adapter<PlaylistRecyclerViewAdapter.DataViewHolder>() {
 
@@ -56,11 +55,6 @@ class PlaylistRecyclerViewAdapter(
         )
         popupMenu.setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {
-                com.mediaapp.design_system.R.id.add_to_playlist -> {
-                    addToPlaylist(track)
-                    true
-                }
-
                 com.mediaapp.design_system.R.id.remove_from_playlist -> {
                     removeFromPlaylist(track)
                     true

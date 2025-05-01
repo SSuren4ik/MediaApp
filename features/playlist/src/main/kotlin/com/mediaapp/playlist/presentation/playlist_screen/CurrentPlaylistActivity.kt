@@ -46,9 +46,6 @@ class CurrentPlaylistActivity : AppCompatActivity(), ResourceProvider {
     private val adapter by lazy {
         PlaylistRecyclerViewAdapter(
             musicServiceLauncher = musicServiceLauncher,
-            addToPlaylist = { track ->
-                viewModel.addTrackToPlaylist(track)
-            },
             removeFromPlaylist = { track ->
                 viewModel.removeTrackFromPlaylist(track)
             }

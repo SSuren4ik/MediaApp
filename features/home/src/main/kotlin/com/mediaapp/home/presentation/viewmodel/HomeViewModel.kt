@@ -14,6 +14,7 @@ import com.mediaapp.home.domain.usecase.GetNewMusicUseCase
 import com.mediaapp.home.domain.usecase.GetPopularMusicUseCase
 import com.mediaapp.home.domain.usecase.GetTopDownloadsMusicUseCase
 import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
@@ -71,8 +72,11 @@ class HomeViewModel(
         }
     }
 
+    private fun launch(block: suspend CoroutineScope.() -> Unit) =
+        viewModelScope.launch(exceptionHandler + Dispatchers.IO, block = block)
+
     fun getMusic() {
-        viewModelScope.launch(exceptionHandler + Dispatchers.IO) {
+        launch {
             if (musicIsNotEmpty()) {
                 _responseStatus.emit(
                     ResponseStatus.SuccessResponse(
@@ -96,7 +100,7 @@ class HomeViewModel(
     fun loadMorePopularMusic() {
         if (loadMorePopularMusicJob?.isActive == true) return
 
-        loadMorePopularMusicJob = viewModelScope.launch(exceptionHandler + Dispatchers.IO) {
+        loadMorePopularMusicJob = launch {
             val result = getPopularMusicUseCase.execute(popularMusicOffset + limit, limit)
             popularMusicOffset += limit
             popularMusic = PopularMusic(popularMusic.value + result.value)
@@ -107,7 +111,7 @@ class HomeViewModel(
     fun loadMoreNewMusic() {
         if (loadMoreNewMusicJob?.isActive == true) return
 
-        loadMoreNewMusicJob = viewModelScope.launch(exceptionHandler + Dispatchers.IO) {
+        loadMoreNewMusicJob = launch {
             val result = getNewMusicUseCase.execute(newMusicOffset + limit, limit)
             newMusicOffset += limit
             newMusic = NewMusic(newMusic.value + result.value)
@@ -118,7 +122,7 @@ class HomeViewModel(
     fun loadMoreTopDownloadsMusic() {
         if (loadMoreTopDownloadsMusicJob?.isActive == true) return
 
-        loadMoreTopDownloadsMusicJob = viewModelScope.launch(exceptionHandler + Dispatchers.IO) {
+        loadMoreTopDownloadsMusicJob = launch {
             val result = getTopDownloadsMusicUseCase.execute(topDownloadsMusicOffset + limit, limit)
             topDownloadsMusicOffset += limit
             topDownloadsMusic = TopDownloadsMusic(topDownloadsMusic.value + result.value)

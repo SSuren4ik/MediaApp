@@ -11,6 +11,7 @@ import com.mediaapp.playlist.domain.usecase.AddTrackPlaylistUseCase
 import com.mediaapp.playlist.domain.usecase.CreatePlaylistUseCase
 import com.mediaapp.playlist.domain.usecase.GetUserPlaylistsUseCase
 import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -47,22 +48,25 @@ class UserPlaylistsViewModel(
         emitErrorMessage(message)
     }
 
+    private fun launch(block: suspend CoroutineScope.() -> Unit) =
+        viewModelScope.launch(exceptionHandler + Dispatchers.IO, block = block)
+
     fun createPlaylist(playlistName: String) {
-        viewModelScope.launch(exceptionHandler + Dispatchers.IO) {
+        launch {
             createPlaylistUseCase.execute(playlistName)
             _responseStatus.emit(UserPlaylistsResponseStatusModel.Success.SuccessCreatePlaylist)
         }
     }
 
     fun getUserPlaylists() {
-        viewModelScope.launch(exceptionHandler + Dispatchers.IO) {
+        launch {
             val result = getUserPlaylistsUseCase.execute()
             _responseStatus.emit(result)
         }
     }
 
     fun addTrackToPlaylist(playlistId: String, track: Track) {
-        viewModelScope.launch(exceptionHandler + Dispatchers.IO) {
+        launch {
             addTrackPlaylistUseCase.execute(playlistId, track)
             _responseStatus.emit(UserPlaylistsResponseStatusModel.Success.SuccessAddSongToPlaylist)
         }

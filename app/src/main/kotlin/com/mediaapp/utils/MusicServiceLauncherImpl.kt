@@ -14,38 +14,57 @@ import com.mediaapp.music_service.presentation.MusicService
 
 class MusicServiceLauncherImpl : MusicServiceLauncher {
 
-    override fun startMusicService(context: Context, track: Track) {
-        loadImageUrlToBitmap(context, track.album_image) { bitmap ->
-            val musicDataForService = MusicDataForService(
-                musicName = track.name,
-                artistName = track.artist_name,
-                duration = track.duration,
-                audio = track.audio,
-                image = bitmap
-            )
+    override fun startMusicService(context: Context, track: Track, allTracks: List<Track>) {
+        loadImageListToMusicDataList(context, allTracks) { musicDataList ->
+            MusicService.MusicPlaylistHolder.trackList = musicDataList
+            val index = musicDataList.indexOfFirst { it.audio == track.audio }
 
             val intent = Intent(context, MusicService::class.java).apply {
                 action = MusicService.Actions.PLAY.name
-                putExtra("track", musicDataForService)
+                putExtra("track_index", index)
             }
 
             context.startService(intent)
         }
     }
 
-    private fun loadImageUrlToBitmap(
+    private fun loadImageListToMusicDataList(
         context: Context,
-        urlString: String,
-        callback: (Bitmap?) -> Unit,
+        tracks: List<Track>,
+        callback: (List<MusicDataForService>) -> Unit,
     ) {
-        Glide.with(context).asBitmap().load(urlString).into(object : CustomTarget<Bitmap>() {
-            override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
-                callback(resource)
-            }
+        val result = mutableListOf<MusicDataForService>()
+        var loadedCount = 0
 
-            override fun onLoadCleared(placeholder: Drawable?) {
-                callback(null)
-            }
-        })
+        for (track in tracks) {
+            Glide.with(context).asBitmap().load(track.album_image)
+                .into(object : CustomTarget<Bitmap>() {
+                    override fun onResourceReady(
+                        resource: Bitmap,
+                        transition: Transition<in Bitmap>?,
+                    ) {
+                        result.add(
+                            MusicDataForService(
+                                musicName = track.name,
+                                artistName = track.artist_name,
+                                duration = track.duration,
+                                audio = track.audio,
+                                image = resource
+                            )
+                        )
+                        loadedCount++
+                        if (loadedCount == tracks.size) {
+                            callback(result)
+                        }
+                    }
+
+                    override fun onLoadCleared(placeholder: Drawable?) {
+                        loadedCount++
+                        if (loadedCount == tracks.size) {
+                            callback(result)
+                        }
+                    }
+                })
+        }
     }
 }

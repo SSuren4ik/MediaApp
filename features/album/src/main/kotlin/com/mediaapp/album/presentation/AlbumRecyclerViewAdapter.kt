@@ -42,7 +42,7 @@ class AlbumRecyclerViewAdapter(
         holder.binding.musicView.setMusicNumber((position + 1).toString())
 
         holder.binding.musicView.setOnClickListener {
-            musicServiceLauncher.startMusicService(holder.itemView.context, data)
+            musicServiceLauncher.startMusicService(holder.itemView.context, data, dataList)
         }
 
         holder.binding.musicView.setOnLongClickListener {

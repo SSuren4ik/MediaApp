@@ -29,33 +29,40 @@ class MusicService : Service() {
         player = ExoPlayer.Builder(this).build()
         player.addListener(object : Player.Listener {
             override fun onIsPlayingChanged(isPlaying: Boolean) {
-                sendPlayingStateChangedBroadcast(isPlaying)
             }
         })
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         intent?.let {
-            val newTrack = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                it.getParcelableExtra("track", MusicDataForService::class.java)
-            } else {
-                it.getParcelableExtra("track")
-            }
-
-            if (newTrack != null) {
-                if (::currentTrack.isInitialized) {
-                    isSameUrl = newTrack.audio == currentTrack.audio
-                }
-                currentTrack = newTrack
-                sendTrackChangedBroadcast(newTrack)
-            } else {
-                isSameUrl = true
-            }
-
             when (it.action) {
                 Actions.STOP.name -> stopSelf()
-                Actions.PLAY.name -> play()
+                Actions.PLAY.name -> {
+                    val index = it.getIntExtra("track_index", -1)
+                    if (index != -1) MusicPlaylistHolder.currentIndex = index
+                    MusicPlaylistHolder.getCurrentTrack()?.let { track ->
+                        currentTrack = track
+                        isSameUrl = false
+                        play()
+                    }
+                }
                 Actions.PAUSE.name -> pause()
+                Actions.NEXT.name -> {
+                    MusicPlaylistHolder.getNextTrack()?.let { track ->
+                        currentTrack = track
+                        isSameUrl = false
+                        play()
+                    }
+                }
+                Actions.PREVIOUS.name -> {
+                    MusicPlaylistHolder.getPreviousTrack()?.let { track ->
+                        currentTrack = track
+                        isSameUrl = false
+                        play()
+                    }
+                }
+
+                else -> {}
             }
         }
         return START_STICKY
@@ -107,6 +114,18 @@ class MusicService : Service() {
         )
         remoteViews.setOnClickPendingIntent(R.id.notification_play_pause, playPausePendingIntent)
 
+        val previousIntent = Intent(this, MusicService::class.java).apply {
+            action = Actions.PREVIOUS.name
+        }
+        val previousPendingIntent = PendingIntent.getService(this, 1, previousIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
+        remoteViews.setOnClickPendingIntent(R.id.notification_previous, previousPendingIntent)
+
+        val nextIntent = Intent(this, MusicService::class.java).apply {
+            action = Actions.NEXT.name
+        }
+        val nextPendingIntent = PendingIntent.getService(this, 2, nextIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
+        remoteViews.setOnClickPendingIntent(R.id.notification_next, nextPendingIntent)
+
         return remoteViews
     }
 
@@ -116,28 +135,12 @@ class MusicService : Service() {
             .setCustomContentView(getCustomRemoteViews(isPlaying))
             .setStyle(NotificationCompat.DecoratedCustomViewStyle())
             .setCustomHeadsUpContentView(getCustomRemoteViews(isPlaying))
-            .setCustomBigContentView(getCustomRemoteViews(isPlaying))
-            .setOngoing(true)
-            .build()
+            .setCustomBigContentView(getCustomRemoteViews(isPlaying)).setOngoing(true).build()
     }
 
     private fun updateNotification(isPlaying: Boolean) {
         val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.notify(1, createNotification(isPlaying))
-    }
-
-    private fun sendTrackChangedBroadcast(track: MusicDataForService) {
-        val intent = Intent(Actions.TRACK_CHANGED.name).apply {
-            putExtra("track", track)
-        }
-        sendBroadcast(intent)
-    }
-
-    private fun sendPlayingStateChangedBroadcast(isPlaying: Boolean) {
-        val intent = Intent(Actions.PLAYING_STATE_CHANGED.name).apply {
-            putExtra("isPlaying", isPlaying)
-        }
-        sendBroadcast(intent)
     }
 
     override fun onDestroy() {
@@ -150,6 +153,27 @@ class MusicService : Service() {
     override fun onBind(intent: Intent?): IBinder? = null
 
     enum class Actions {
-        STOP, PLAY, PAUSE, TRACK_CHANGED, PLAYING_STATE_CHANGED
+        STOP, PLAY, PAUSE, NEXT, PREVIOUS
+    }
+
+    object MusicPlaylistHolder {
+        var trackList: List<MusicDataForService> = emptyList()
+        var currentIndex: Int = 0
+
+        fun getCurrentTrack(): MusicDataForService? =
+            trackList.getOrNull(currentIndex)
+
+        fun getNextTrack(): MusicDataForService? {
+            if (trackList.isEmpty()) return null
+            currentIndex = (currentIndex + 1) % trackList.size
+            return trackList[currentIndex]
+        }
+
+        fun getPreviousTrack(): MusicDataForService? {
+            if (trackList.isEmpty()) return null
+            currentIndex = if (currentIndex - 1 < 0) trackList.size - 1 else currentIndex - 1
+            return trackList[currentIndex]
+        }
+
     }
 }

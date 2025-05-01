@@ -50,7 +50,7 @@ class SearchRecyclerViewAdapter(
                 .apply(requestOptions).into(holder.binding.musicView.iconImage)
 
             holder.binding.musicView.setOnClickListener {
-                musicServiceLauncher.startMusicService(holder.itemView.context, data)
+                musicServiceLauncher.startMusicService(holder.itemView.context, data, dataList)
             }
 
             holder.binding.musicView.setOnLongClickListener {

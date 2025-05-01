@@ -29,11 +29,8 @@ class NetworkModule {
     @Singleton
     fun provideMediaService(@Named("baseUrl") baseUrl: String): MediaServiceApi {
         return Retrofit.Builder().baseUrl(baseUrl)
-            .addConverterFactory(GsonConverterFactory.create()).client(
-                OkHttpClient.Builder().addInterceptor(HttpLoggingInterceptor().apply {
-                        level = HttpLoggingInterceptor.Level.BODY
-                    }).build()
-            ).build().create(MediaServiceApi::class.java)
+            .addConverterFactory(GsonConverterFactory.create()).build()
+            .create(MediaServiceApi::class.java)
     }
 
     @Provides

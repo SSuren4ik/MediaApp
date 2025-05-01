@@ -39,13 +39,13 @@ class MusicServiceLauncherImpl : MusicServiceLauncher {
         callback: (Bitmap?) -> Unit,
     ) {
         Glide.with(context).asBitmap().load(urlString).into(object : CustomTarget<Bitmap>() {
-                override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
-                    callback(resource)
-                }
+            override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
+                callback(resource)
+            }
 
-                override fun onLoadCleared(placeholder: Drawable?) {
-                    callback(null)
-                }
-            })
+            override fun onLoadCleared(placeholder: Drawable?) {
+                callback(null)
+            }
+        })
     }
 }

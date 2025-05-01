@@ -111,11 +111,14 @@ class MusicService : Service() {
     }
 
     private fun createNotification(isPlaying: Boolean): Notification {
-        return NotificationCompat.Builder(this, "running_channel").setSmallIcon(R.drawable.img)
+        return NotificationCompat.Builder(this, "running_channel")
+            .setSmallIcon(R.drawable.img)
             .setCustomContentView(getCustomRemoteViews(isPlaying))
             .setStyle(NotificationCompat.DecoratedCustomViewStyle())
             .setCustomHeadsUpContentView(getCustomRemoteViews(isPlaying))
-            .setCustomBigContentView(getCustomRemoteViews(isPlaying)).setOngoing(true).build()
+            .setCustomBigContentView(getCustomRemoteViews(isPlaying))
+            .setOngoing(true)
+            .build()
     }
 
     private fun updateNotification(isPlaying: Boolean) {

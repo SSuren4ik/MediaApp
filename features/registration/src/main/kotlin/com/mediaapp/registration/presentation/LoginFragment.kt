@@ -45,7 +45,7 @@ class LoginFragment : Fragment() {
 
         binding.loginBtn.setOnClickListener {
             binding.loginBtn.isEnabled = false
-            viewModel.loginUser(Email("Test2@mail.ru"), Password("Test123"))
+            viewModel.loginUser(Email("Test1@mail.ru"), Password("Test123"))
 //            viewModel.loginUser(getEmail(), getPassword())
         }
 

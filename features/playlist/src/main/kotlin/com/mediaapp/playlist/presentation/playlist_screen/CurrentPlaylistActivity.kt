@@ -44,9 +44,15 @@ class CurrentPlaylistActivity : AppCompatActivity(), ResourceProvider {
     lateinit var playlistHostLauncher: PlaylistHostLauncher
 
     private val adapter by lazy {
-        PlaylistRecyclerViewAdapter(musicServiceLauncher) { track ->
-            playlistHostLauncher.launchPlaylistHost(this, track)
-        }
+        PlaylistRecyclerViewAdapter(
+            musicServiceLauncher = musicServiceLauncher,
+            addToPlaylist = { track ->
+                viewModel.addTrackToPlaylist(track)
+            },
+            removeFromPlaylist = { track ->
+                viewModel.removeTrackFromPlaylist(track)
+            }
+        )
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -85,6 +91,11 @@ class CurrentPlaylistActivity : AppCompatActivity(), ResourceProvider {
 
                     CurrentPlaylistResponseStatusModel.Success.SuccessUpdatePlaylistName -> {
                         showToast(getString(R.string.update_playlist_name_message))
+                    }
+
+                    is CurrentPlaylistResponseStatusModel.Success.SuccessRemoveTrackFromPlaylist -> {
+                        showToast(getString(R.string.remove_track_from_playlist_message))
+                        fetchPlaylistTracks()
                     }
 
                     else -> showToast("Неизвестная ошибка")

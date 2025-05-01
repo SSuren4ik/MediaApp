@@ -61,7 +61,7 @@ class UserPlaylistsViewModel(
         }
     }
 
-    fun addSongToPlaylist(playlistId: String, track: Track) {
+    fun addTrackToPlaylist(playlistId: String, track: Track) {
         viewModelScope.launch(exceptionHandler + Dispatchers.IO) {
             addTrackPlaylistUseCase.execute(playlistId, track)
             _responseStatus.emit(UserPlaylistsResponseStatusModel.Success.SuccessAddSongToPlaylist)

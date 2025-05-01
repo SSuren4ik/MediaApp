@@ -16,7 +16,7 @@ class FirebasePlaylistStorageImpl(
         val userId = firebaseAuth.currentUser!!.uid
         checkPlaylistExistsForUser(
             playlistName, userId
-        ) // Проверяем, существует ли уже плейлист с таким названием у этого пользователя
+        )
 
         val userName = getUserName(userId)
 
@@ -28,7 +28,7 @@ class FirebasePlaylistStorageImpl(
             playlistName = playlistName,
             authorId = userId,
             authorName = userName,
-            owners = listOf(userId) // Добавляем пользователя как владельца
+            owners = listOf(userId)
         )
 
         playlistRef.setValue(playlistData).await()
@@ -118,6 +118,19 @@ class FirebasePlaylistStorageImpl(
             .setValue(playlistData.playlistId).await()
     }
 
+
+    override suspend fun removeTrackFromPlaylist(playlistId: String, track: Track) {
+        val playlistRef = firebaseDatabase.child("Playlists").child(playlistId)
+        val snapshot = playlistRef.get().await()
+        val playlist = snapshot.getValue(PlaylistData::class.java)
+            ?: throw FirebaseExceptions.PlaylistNotFoundException("Плейлист не найден")
+
+        val tracks = playlist.tracks.toMutableList()
+        if (!tracks.remove(track)) {
+            throw FirebaseExceptions.TrackNotFoundException("Трек не найден в плейлисте")
+        }
+        playlistRef.child("tracks").setValue(tracks).await()
+    }
     private suspend fun getUserName(userId: String): String {
         val userRef = firebaseDatabase.child("Users").child(userId).child("username")
         val snapshot = userRef.get().await()

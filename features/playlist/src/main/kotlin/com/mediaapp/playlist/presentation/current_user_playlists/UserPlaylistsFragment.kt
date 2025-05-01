@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Build
 import android.os.Build.VERSION_CODES
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -55,7 +56,7 @@ class UserPlaylistsFragment : Fragment(), ResourceProvider {
         UserPlaylistsAdapter { playlistId ->
             if (mode) {
                 track?.let {
-                    viewModel.addSongToPlaylist(playlistId, it)
+                    viewModel.addTrackToPlaylist(playlistId, it)
                 }
                 requireActivity().finish()
             } else {
@@ -84,6 +85,7 @@ class UserPlaylistsFragment : Fragment(), ResourceProvider {
         observeUserPlaylists()
         viewModel.getUserPlaylists()
         initFragmentMode()
+        Log.d("UserPlaylistsFragment", "onViewCreated: $mode")
 
         binding.addPlaylistButton.setOnClickListener {
             viewModel.createPlaylist("Новый плейлист")

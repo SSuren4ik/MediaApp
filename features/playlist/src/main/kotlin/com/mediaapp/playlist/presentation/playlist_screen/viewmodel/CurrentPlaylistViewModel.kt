@@ -10,8 +10,10 @@ import com.mediaapp.playlist.domain.models.CurrentPlaylistResponseStatusModel
 import com.mediaapp.playlist.domain.models.UserPlaylistsResponseStatusModel
 import com.mediaapp.playlist.domain.usecase.AddTrackPlaylistUseCase
 import com.mediaapp.playlist.domain.usecase.GetPlaylistTracksUseCase
+import com.mediaapp.playlist.domain.usecase.RemoveTrackPlaylistUseCase
 import com.mediaapp.playlist.domain.usecase.UpdatePlaylistNameUseCase
 import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -31,6 +33,9 @@ class CurrentPlaylistViewModel(
     @Inject
     lateinit var addTrackPlaylistUseCase: AddTrackPlaylistUseCase
 
+    @Inject
+    lateinit var removeTrackPlaylistUseCase: RemoveTrackPlaylistUseCase
+
     private val _responseStatus = MutableSharedFlow<CurrentPlaylistResponseStatusModel>()
     val responseStatus: SharedFlow<CurrentPlaylistResponseStatusModel> = _responseStatus
 
@@ -48,15 +53,18 @@ class CurrentPlaylistViewModel(
         emitErrorMessage(message)
     }
 
+    private fun launch(block: suspend CoroutineScope.() -> Unit) =
+        viewModelScope.launch(exceptionHandler + Dispatchers.IO, block = block)
+
     fun getPlaylistTracks(playlistId: String) {
-        viewModelScope.launch(exceptionHandler + Dispatchers.IO) {
+        launch {
             val result = getPlaylistTracks.execute(playlistId)
             _responseStatus.emit(result)
         }
     }
 
     fun updatePlaylistName(playlistNewName: String) {
-        viewModelScope.launch(exceptionHandler + Dispatchers.IO) {
+        launch {
             updatePlaylistNameUseCase.execute(playlistId, playlistNewName)
             playlistId = playlistNewName
             _responseStatus.emit(CurrentPlaylistResponseStatusModel.Success.SuccessUpdatePlaylistName)
@@ -64,17 +72,24 @@ class CurrentPlaylistViewModel(
     }
 
     fun addTrackToPlaylist(track: Track) {
-        viewModelScope.launch(exceptionHandler + Dispatchers.IO) {
+        launch {
             val result = addTrackPlaylistUseCase.execute(playlistId, track)
             when (result) {
                 is UserPlaylistsResponseStatusModel.Success.SuccessAddSongToPlaylist -> {
-                    _responseStatus.emit(CurrentPlaylistResponseStatusModel.Success.SuccessAddSongToPlaylist)
+                    _responseStatus.emit(CurrentPlaylistResponseStatusModel.Success.SuccessAddTrackToPlaylist)
                 }
 
                 else -> {
                     _responseStatus.emit(CurrentPlaylistResponseStatusModel.Error("Неизвестная ошибка"))
                 }
             }
+        }
+    }
+
+    fun removeTrackFromPlaylist(track: Track) {
+        launch {
+            removeTrackPlaylistUseCase.execute(playlistId, track)
+            _responseStatus.emit(CurrentPlaylistResponseStatusModel.Success.SuccessRemoveTrackFromPlaylist)
         }
     }
 

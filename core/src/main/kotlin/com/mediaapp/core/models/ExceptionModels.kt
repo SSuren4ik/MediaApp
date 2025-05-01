@@ -14,4 +14,6 @@ sealed class FirebaseExceptions(val error: String) : Exception(error) {
     data class PlaylistNotFoundException(val errorMessage: String) : FirebaseExceptions(errorMessage)
 
     data class TrackAlreadyExistsException(val errorMessage: String) : FirebaseExceptions(errorMessage)
+
+    data class TrackNotFoundException(val errorMessage: String) : FirebaseExceptions(errorMessage)
 }

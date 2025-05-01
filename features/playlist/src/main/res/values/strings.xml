@@ -11,4 +11,5 @@
     <string name="save_playlist_message">Плейлист сохранен</string>
     <string name="save_playlist_option_menu_text">Сохранить плейлист</string>
     <string name="playlist_saved_already_message">Данный плейлист уже был добавлен</string>
+    <string name="remove_track_from_playlist_message">Трек удален из плейлиста</string>
 </resources>

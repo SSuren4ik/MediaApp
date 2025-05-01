@@ -12,6 +12,7 @@ import com.mediaapp.playlist.domain.usecase.CreatePlaylistUseCase
 import com.mediaapp.playlist.domain.usecase.GetPlaylistTracksUseCase
 import com.mediaapp.playlist.domain.usecase.GetSelectedUserPlaylistsUseCase
 import com.mediaapp.playlist.domain.usecase.GetUserPlaylistsUseCase
+import com.mediaapp.playlist.domain.usecase.RemoveTrackPlaylistUseCase
 import com.mediaapp.playlist.domain.usecase.SaveSelectedPlaylistUseCase
 import com.mediaapp.playlist.domain.usecase.UpdatePlaylistNameUseCase
 import dagger.Module
@@ -75,4 +76,10 @@ class PlaylistModule {
     fun providesSaveSelectedPlaylistUseCase(
         playlistRepository: PlaylistRepository,
     ): SaveSelectedPlaylistUseCase = SaveSelectedPlaylistUseCase(playlistRepository)
+
+    @Provides
+    @Singleton
+    fun providesRemoveTrackPlaylistUseCase(
+        playlistRepository: PlaylistRepository,
+    ): RemoveTrackPlaylistUseCase = RemoveTrackPlaylistUseCase(playlistRepository)
 }

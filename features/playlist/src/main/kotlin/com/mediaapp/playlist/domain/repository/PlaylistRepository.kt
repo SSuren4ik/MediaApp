@@ -18,4 +18,6 @@ interface PlaylistRepository {
     suspend fun getSelectedUserPlaylists(userId: String): List<PlaylistData>
 
     suspend fun saveSelectedUserPlaylist(playlistData: PlaylistData)
+
+    suspend fun removeTrackFromPlaylist(playlistId: String, track: Track)
 }

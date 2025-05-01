@@ -3,4 +3,7 @@
     <item
         android:id="@+id/add_to_playlist"
         android:title="@string/add_to_playlist_menu_element" />
+    <item
+        android:id="@+id/remove_from_playlist"
+        android:title="@string/remove_from_playlist_menu_element" />
 </menu>

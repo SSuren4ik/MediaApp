@@ -35,4 +35,8 @@ class PlaylistRepositoryImpl(
     override suspend fun saveSelectedUserPlaylist(playlistData: PlaylistData) {
         playlistStorage.saveSelectedUserPlaylist(playlistData)
     }
+
+    override suspend fun removeTrackFromPlaylist(playlistId: String, track: Track) {
+        playlistStorage.removeTrackFromPlaylist(playlistId, track)
+    }
 }
